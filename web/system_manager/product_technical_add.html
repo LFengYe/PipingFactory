@@ -1,0 +1,787 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/bootstrap.min.css" />
+        <title>工艺添加</title>
+        <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
+        <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="../javascript/script.js"></script>
+        <script type="text/javascript" src="../javascript/projectScript.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                $("#gaoYaGuanAddDiv").css("display", "none");
+                $("#yaZhuangAddDiv").css("display", "none");
+                $("#chengXingAddDiv").css("display", "none");
+                $("#zhuanAddDiv").css("display", "none");
+
+                $("#search").bind("click", function () {
+                    getProductTechnical("search_form");
+                });
+                $("#reset").bind("click", function () {
+                    document.getElementById("search_form").reset();
+                });
+                $("select").bind("change", function (e) {
+                    $("#" + $(e.target).attr("id") + "~input").val($(e.target).val());
+                });
+                $("#yaZhuangAdd").bind("click", function () {
+                    if ($("#productLineId").val() == -1) {
+                        alert("请选择生产线!");
+                        return;
+                    }
+                    if ($.trim($("#productCode").val()) === "") {
+                        alert("物料编码不能为空！");
+                        return false;
+                    }
+                    var sendBody = serializeForm("yaZhuangAddForm");
+                    var jsonData = JSON.parse(sendBody);
+                    jsonData.productLineId = $("#productLineId").val();
+                    sendBody = JSON.stringify(jsonData);
+                    getDataInterface("addTechnicalYaZhuang.pc", sendBody, function (result) {
+                        var obj = JSON.parse(result);
+                        alert(obj.message);
+                        if (obj.status === 0) {
+                        }
+                    });
+                });
+                $("#gaoYaGuanAdd").bind("click", function () {
+                    if ($("#productLineId").val() == -1) {
+                        alert("请选择生产线!");
+                        return;
+                    }
+                    if ($.trim($("#productCode_g").val()) === "") {
+                        alert("物料编码不能为空！");
+                        return false;
+                    }
+                    var sendBody = serializeForm("gaoYaGuanAddForm");
+                    var jsonData = JSON.parse(sendBody);
+                    jsonData.productLineId = $("#productLineId").val();
+                    sendBody = JSON.stringify(jsonData);
+                    getDataInterface("addTechnicalGaoYaGuan.pc", sendBody, function (result) {
+                        var obj = JSON.parse(result);
+                        alert(obj.message);
+                        if (obj.status === 0) {
+                        }
+                    });
+                });
+                $("#chengXingAdd").bind("click", function () {
+                    if ($("#productLineId").val() == -1) {
+                        alert("请选择生产线!");
+                        return;
+                    }
+                    if ($.trim($("#productCode_c").val()) === "") {
+                        alert("物料编码不能为空！");
+                        return false;
+                    }
+                    var sendBody = serializeForm("chengXingAddForm");
+                    var jsonData = JSON.parse(sendBody);
+                    jsonData.productLineId = $("#productLineId").val();
+                    sendBody = JSON.stringify(jsonData);
+                    getDataInterface("addTechnicalChengXing.pc", sendBody, function (result) {
+                        var obj = JSON.parse(result);
+                        alert(obj.message);
+                        if (obj.status === 0) {
+                        }
+                    });
+                });
+                $("#zhuanAdd").bind("click", function () {
+                    if ($("#productLineId").val() == -1) {
+                        alert("请选择生产线!");
+                        return;
+                    }
+                    if ($.trim($("#productCode_z").val()) === "") {
+                        alert("物料编码不能为空！");
+                        return false;
+                    }
+                    var sendBody = serializeForm("ZhuanAddForm");
+                    var jsonData = JSON.parse(sendBody);
+                    jsonData.productLineId = $("#productLineId").val();
+                    sendBody = JSON.stringify(jsonData);
+                    getDataInterface("addTechnicalZhuan.pc", sendBody, function (result) {
+                        var obj = JSON.parse(result);
+                        alert(obj.message);
+                        if (obj.status === 0) {
+                        }
+                    });
+                });
+                $("#productLineIdSelect").bind("change", function () {
+                    var productLine = $("#productLineIdSelect").val();
+                    if (productLine == 1) {
+                        $("#gaoYaGuanAddDiv").css("display", "block");
+                        $("#yaZhuangAddDiv").css("display", "none");
+                        $("#chengXingAddDiv").css("display", "none");
+                        $("#zhuanAddDiv").css("display", "none");
+                    }
+                    if (productLine == 2) {
+                        $("#gaoYaGuanAddDiv").css("display", "none");
+                        $("#yaZhuangAddDiv").css("display", "block");
+                        $("#chengXingAddDiv").css("display", "none");
+                        $("#zhuanAddDiv").css("display", "none");
+                    }
+                    if (productLine == 3) {
+                        $("#gaoYaGuanAddDiv").css("display", "none");
+                        $("#yaZhuangAddDiv").css("display", "none");
+                        $("#chengXingAddDiv").css("display", "block");
+                        $("#zhuanAddDiv").css("display", "none");
+                    }
+                    if (productLine == 99) {
+                        $("#gaoYaGuanAddDiv").css("display", "none");
+                        $("#yaZhuangAddDiv").css("display", "none");
+                        $("#chengXingAddDiv").css("display", "none");
+                        $("#zhuanAddDiv").css("display", "block");
+                    }
+                });
+            };
+        </script>
+    </head>
+    <body style="background-color: #e9f0fa;">
+        <div class="titleName"><div class="vline"></div>工艺添加</div>
+        <div class="myline"></div>
+
+        <div class="function">
+            <span class="left">
+                <a href="javascript:history.back(-1)" id="" style="display: none;background-color: rgb(91,192,222)">返回</a>
+                <a href="javascript:void(0)" id="" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
+            </span>
+            <span class="right" style="display: none;">
+                <a href="javascript:void(0)" id="search" style="background-color: rgb(91,192,222)">搜索</a>
+                <a href="javascript:void(0)" id="reset" style="background-color: rgb(91,184,93)">重置</a>
+            </span>
+        </div>
+        <div class="search">
+            <label>请选择生产线:</label>
+            <select id="productLineIdSelect">
+                <option value="-1">请选择生产线</option>
+                <option value="1">高压管</option>
+                <option value="2">压装</option>
+<!--                <option value="3">成型工段</option>-->
+                <option value="99">多生产线</option>
+            </select>
+            <input type="hidden" name="productLineId" id="productLineId" value="2" />
+        </div>
+
+        <div>
+            <div id="gaoYaGuanAddDiv">
+                <form id="gaoYaGuanAddForm">
+                    <table class="detail_data">
+                        <tr class='table_header'><td>物料编码</td><td>下料</td><td>检验</td><td>打码</td><td>预装</td><td>扣压</td><td>打压</td><td>划线、色标</td><td>包装</td></tr>
+                        <tr>
+                            <td><input type="text" name="productCode_g" id="productCode_g"  value=""/></td>
+                            <td>
+                                <select id="xiaLiaoNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="xiaLiaoNextStation_g" id="xiaLiaoNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="jianYanNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="jianYanNextStation_g" id="jianYanNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="daMaNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="daMaNextStation_g" id="daMaNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="yuZhuangNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="yuZhuangNextStation_g" id="yuZhuangNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="kouYaNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="kouYaNextStation_g" id="kouYaNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="daYaNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="daYaNextStation_g" id="daYaNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="huaXianNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="huaXianNextStation_g" id="huaXianNextStation_g" value="0" />
+                            </td>
+                            <td>
+                                <select id="baoZhuangNextStationSelect_g">
+                                    <option value="0">无</option>
+                                    <option value="2">下料</option>
+                                    <option value="1">检验</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">预装</option>
+                                    <option value="5">扣压</option>
+                                    <option value="6">打压</option>
+                                    <option value="7">划线</option>
+                                    <option value="8">包装</option>
+                                </select>
+                                <input type="hidden" name="baoZhuangNextStation_g" id="baoZhuangNextStation_g" value="0" />
+                            </td>
+                        </tr>
+                    </table>
+                    <center>
+                        <a class="btn btn-default" style="margin-top: 50px;" role="button" id="gaoYaGuanAdd">保存</a>
+                    </center>
+                </form>
+            </div>
+
+            <div id="yaZhuangAddDiv">
+                <form id="yaZhuangAddForm">
+                    <table class="detail_data">
+                        <tr class='table_header'><td>物料编码</td><td>下料</td><td>彩标</td><td>打码</td><td>压装</td><td>划线</td><td>护管</td><td>包装</td></tr>
+                        <tr class="tab-content">
+                            <td><input type="text" name="productCode" id="productCode"  value=""/></td>
+                            <td>
+                                <select id="xiaLiaoNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="xiaLiaoNextStation" id="xiaLiaoNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="caiBiaoNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="caiBiaoNextStation" id="caiBiaoNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="daMaNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="daMaNextStation" id="daMaNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangNextStation" id="yaZhuangNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="huaXianNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="huaXianNextStation" id="huaXianNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="huGuanNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="huGuanNextStation" id="huGuanNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="baoZhuangNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">彩标</option>
+                                    <option value="3">打码</option>
+                                    <option value="4">压装</option>
+                                    <option value="5">划线</option>
+                                    <option value="6">护管</option>
+                                    <option value="7">包装</option>
+                                </select>
+                                <input type="hidden" name="baoZhuangNextStation" id="baoZhuangNextStation" value="0" />
+                            </td>
+                        </tr>
+                    </table>
+                    <center>
+                        <a class="btn btn-default" style="margin-top: 50px;" role="button" id="yaZhuangAdd">保存</a>
+                    </center>
+                </form>
+            </div>
+
+            <div id="chengXingAddDiv">
+                <form id="chengXingAddForm">
+                    <table class="detail_data">
+                        <tr class='table_header'><td>物料编码</td><td>下料</td><td>打码</td><td>划线</td><td>成型</td><td>加热冷却</td><td>截长</td></tr>
+                        <tr class="tab-content">
+                            <td><input type="text" name="productCode_c" id="productCode_c"  value=""/></td>
+                            <td>
+                                <select id="xiaLiaoNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="xiaLiaoNextStation_c" id="xiaLiaoNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="daMaNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="daMaNextStation_c" id="daMaNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="huaXianNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="huaXianNextStation_c" id="huaXianNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="chengXingNextStation_c" id="chengXingNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="jieReLengQueNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="jieReLengQueNextStation_c" id="jieReLengQueNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="baoZhuangNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="1">下料</option>
+                                    <option value="2">打码</option>
+                                    <option value="3">划线</option>
+                                    <option value="4">成型</option>
+                                    <option value="5">加热冷却</option>
+                                    <option value="6">截长</option>
+                                </select>
+                                <input type="hidden" name="jieChangNextStation_c" id="jieChangNextStation_c" value="0" />
+                            </td>
+                        </tr>
+                    </table>
+                    <center>
+                        <a class="btn btn-default" style="margin-top: 50px;" role="button" id="chengXingAdd">保存</a>
+                    </center>
+                </form>
+            </div>
+            
+            <div id="zhuanAddDiv">
+                <form id="ZhuanAddForm">
+                    <table class="detail_data" style='width: 2048px;'>
+                        <tr class='table_header'><td>物料编码</td><td>成型信息录入</td><td>成型下料</td><td>成型打码</td><td>成型划线</td><td>成型成型</td><td>成型加热冷却</td><td>成型截长</td><td>压装下料</td><td>压装彩标</td><td>压装打码</td><td>压装压装</td><td>压装划线</td><td>压装护管</td><td>压装包装</td></tr>
+                        <tr class="tab-content">
+                            <td><input type="text" name="productCode_z" id="productCode_z"  value=""/></td>
+                            <td>
+                                <select id="chengXingInputInfoNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingInputInfoNextStation_c" id="chengXingInputInfoNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingXiaLiaoNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingXiaLiaoNextStation_c" id="chengXingXiaLiaoNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingDaMaNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingDaMaNextStation_c" id="chengXingDaMaNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingHuaXianNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingHuaXianNextStation_c" id="chengXingHuaXianNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingChengXingNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingChengXingNextStation_c" id="chengXingChengXingNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingJieReLengQueNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingJieReLengQueNextStation_c" id="chengXingJieReLengQueNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="chengXingJieChangNextStationSelect_c">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="chengXingJieChangNextStation_c" id="chengXingJieChangNextStation_c" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangxiaLiaoNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangxiaLiaoNextStation" id="yaZhuangxiaLiaoNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangcaiBiaoNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangcaiBiaoNextStation" id="yaZhuangcaiBiaoNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangdaMaNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangdaMaNextStation" id="yaZhuangdaMaNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangyaZhuangNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangyaZhuangNextStation" id="yaZhuangyaZhuangNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuanghuaXianNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuanghuaXianNextStation" id="yaZhuanghuaXianNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuanghuGuanNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuanghuGuanNextStation" id="yaZhuanghuGuanNextStation" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangbaoZhuangNextStationSelect">
+                                    <option value="0">无</option>
+                                    <option value="21">成型信息录入</option>
+                                    <option value="22">成型下料</option>
+                                    <option value="23">成型打码</option>
+                                    <option value="24">成型划线</option>
+                                    <option value="25">成型成型</option>
+                                    <option value="26">成型加热冷却</option>
+                                    <option value="27">成型截长</option>
+                                    <option value="11">压装下料</option>
+                                    <option value="12">压装彩标</option>
+                                    <option value="13">压装打码</option>
+                                    <option value="14">压装压装</option>
+                                    <option value="15">压装划线</option>
+                                    <option value="16">压装护管</option>
+                                    <option value="17">压装包装</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangbaoZhuangNextStation" id="yaZhuangbaoZhuangNextStation" value="0" />
+                            </td>
+                        </tr>
+                    </table>
+                    <center>
+                        <a class="btn btn-default" style="margin-top: 50px;" role="button" id="zhuanAdd">保存</a>
+                    </center>
+                </form>
+            </div>
+            <div style="clear: both;float: none;"></div>
+        </div>
+    </body>
+</html>

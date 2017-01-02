@@ -1,0 +1,83 @@
+/* 
+    Document   : test
+    Created on : 2014-10-8, 3:34:33
+    Author     : LFeng
+    Description:
+        Purpose of the stylesheet follows.
+*/
+body {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    font-family: verdana, arial, helvetica, sans-serif;
+    background-color: #FFF;
+    height: 100%;
+    overflow: hidden;
+}
+/* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning. at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
+#top {
+    clear: both;
+    margin: 0px;
+    padding: 0px;
+    background: #293140;
+    height: 45px; /* ie5win fudge begins */
+}
+/*html>body #top {
+    height: 42px;  ie5win fudge ends 
+}*/
+#left {
+    position: absolute;
+    top: 45px;
+    margin: 0px;
+    padding: 0px;
+    background: #FFFFFF;
+    width: 220px; /* ie5win fudge begins */
+    overflow-y: auto;
+}
+/*html>body #left {
+    width: 210px;  ie5win fudge ends 
+}*/
+#right {
+    top: 45px;
+    margin: 0px 0px 0px 220px;
+    padding: 0px 0px 0px 0px;
+    background: #e9f0fa;
+    height: 100%;
+    text-align: center;
+}
+#mapview {
+    height: 100%;
+}
+/*@media screen and(max-height: 800px) {
+    #right {
+        height: 560px;
+    }
+    #mapview {
+        height: 560px;
+    }
+}
+@media screen and (max-height:900px) {
+    #right {
+        height: 760px;
+    }
+    #mapview {
+        height: 660px;
+    }
+}
+
+@media screen and (min-height:1024px) {
+    #right {
+        height: 780px;
+    }
+    #mapview {
+        height: 780px;
+    }
+}
+
+@media screen and (min-height: 1600px) {
+    #right {
+        height: 1300px;
+    }
+    #mapview {
+        height: 1300px;
+    }
+}*/

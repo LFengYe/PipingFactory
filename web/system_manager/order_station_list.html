@@ -1,0 +1,120 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/bootstrap.min.css" />
+
+        <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
+        <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="../javascript/script.js"></script>
+        <script type="text/javascript" src="../javascript/projectScript.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                getStationList(getUrlParam("orderId"));
+            };
+            function getStationDetail(orderId, stationId, type) {
+                if (type === 1)
+                    parent.displayLayer("system_manager/order_station_detail.html?orderId=" + orderId + "&stationId=" + stationId, "查看工位信息");
+                if (type === 2)
+                    parent.displayLayer("system_manager/order_station_detail.html?orderId=" + orderId + "&stationId=" + stationId, "编辑工位信息");
+            }
+            
+            function getStationList(orderId) {
+                var sendBody = '{"orderId":"' + orderId + '"}';
+                getDataInterface('getStationList.pc', sendBody, function (result) {
+                    var obj = JSON.parse(result);
+                    if (obj.status === 0) {
+                        var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>工位名称</td><td>工位序号</td><td>操作</td></tr>";
+                        for (var i = 0; i < obj.data.length; i++) {
+                            htmlStr += "<tr class='table_content'>";
+                            htmlStr += "<td><input type='checkbox' /></td>";
+                            htmlStr += "<td>" + (obj.data[i].stationName ? obj.data[i].stationName : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].stationIndex ? obj.data[i].stationIndex : "") + "</td>";
+                            htmlStr += "<td>";
+                            htmlStr += "<a href='javascript:getStationDetail(" + orderId + "," + obj.data[i].stationId + "," + "1)'>查看</a>";
+//                            htmlStr += "<a href='javascript:getStationDetail(" + orderId + "," + obj.data[i].stationId + "," + "2)'>编辑</a>";
+                            htmlStr += "</a>";
+                            htmlStr += "</td>";
+                            htmlStr += "</tr>";
+                        }
+                        htmlStr += "</table>";
+                        $("#message_list").html(htmlStr);
+                    } else {
+                        alert("没有工位列表");
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body style="background-color: #e9f0fa;">
+        <div class="titleName"><div class="vline"></div>订单工位信息</div>
+        <div class="myline"></div>
+
+        <div class="function">
+            <span class="left">
+                <a href="javascript:history.back(-1)" id="importData" style="background-color: rgb(91,192,222)">返回</a>
+                <a href="javascript:void(0)" id="" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
+            </span>
+            <span class="right" style="display: none;">
+                <a href="javascript:void(0)" id="search" style="background-color: rgb(91,192,222)">搜索</a>
+                <a href="javascript:void(0)" id="reset" style="background-color: rgb(91,184,93)">重置</a>
+            </span>
+        </div>
+        <div class="search" style="display: none;">
+            <form id="search_form" class="form-inline">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="productCommand">订单编号：</label>
+                                <input type="text" name="productCommand" id="productCommand"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="productName">物料名称：</label>
+                                <input type="text" name="productName" id="productName"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="hidden" name="productLineId" id="productLineId" value="-1"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="planFinishedTime">生产日期:</label>
+                                <input type="text" name="planFinishedTime" id="planFinishedTime"/>
+                            </div>
+                            <input type="hidden" name="pageIndex" id="pageIndex" value="1" />
+                            <input type="hidden" name="pageSize" id="pageSize" value="11" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div>
+            <div id="message_list">
+                <table class="detail_data">
+                    <tr class='table_header'><td>选择</td><td>工位名称</td><td>工位序号</td><td>操作</td></tr>
+                </table>
+            </div>
+            <div id="page_div" class="page_div">
+                <div id="page"></div>
+                <div id="page_info"></div>
+            </div>
+            <div style="clear: both;float: none;"></div>
+        </div>
+    </body>
+</html>

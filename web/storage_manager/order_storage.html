@@ -1,0 +1,166 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/bootstrap.min.css" />
+
+        <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
+        <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="../javascript/script.js"></script>
+        <script type="text/javascript" src="../javascript/projectScript.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                $("#productLineIdSelect").bind("change", function () {
+                    $("#productLineId").val($("#productLineIdSelect").val());
+                    getOrderList("search_form");
+                });
+                $("#beginTime").bind("click", function () {
+                    new WdatePicker({dateFmt: 'yy/MM/dd', maxDate: getMaxDate()});
+                });
+                $("#endTime").bind("click", function () {
+                    new WdatePicker({dateFmt: 'yyyy-MM-dd', maxDate: getMaxDate()});
+                });
+                $("#search").bind("click", function () {
+                    getOrderList("search_form");
+                });
+                $("reset").bind("click", function () {
+                    document.getElementById("search_from").reset();
+                });
+                getOrderList("search_form");
+            };
+            function getOrderList(formId) {
+                var sendBody = serializeForm(formId);
+                getDataInterface('getOrderList.pc', sendBody, function (result) {
+                    var obj = JSON.parse(result);
+                    if (obj.status === 0) {
+                        var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>生产订单号</td><td>物料编码</td><td>物料名称</td><td>周转卡号</td><td>单位</td><td>计划完工数量</td><td>规格</td><td>计划完工日期</td><td>客户名称</td></tr>";
+                        for (var i = 0; i < obj.data.length; i++) {
+                            htmlStr += "<tr class='table_content'>";
+                            htmlStr += "<td><input type='checkbox' /></td>";
+                            htmlStr += "<td>" + (obj.data[i].orderId ? obj.data[i].orderId : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].productCommand ? obj.data[i].productCommand : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].productCode ? obj.data[i].productCode : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].productName ? obj.data[i].productName : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].cardNum ? obj.data[i].cardNum : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].productUnit ? obj.data[i].productUnit : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].planNum ? obj.data[i].planNum : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].productStandard ? obj.data[i].productStandard : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].planFinishTime ? obj.data[i].planFinishTime : "") + "</td>";
+                            htmlStr += "<td>" + (obj.data[i].customerName ? obj.data[i].customerName : "") + "</td>";
+                        }
+                        htmlStr += "</table>";
+                        $("#message_list").html(htmlStr);
+
+                        var recordCount = obj.count;
+                        var pageSize = $("#pageSize").val();
+                        var pageCount = parseInt((recordCount % pageSize === 0) ? (recordCount / pageSize) : (recordCount / pageSize + 1));
+                        layerPage(pageCount);
+
+                    } else {
+                        var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>生产订单号</td><td>物料编码</td><td>物料名称</td><td>单位</td><td>计划完工数量</td><td>规格</td><td>计划完工日期</td><td>操作</td></tr>";
+                        htmlStr += "<tr><td><h4>没有查询到相关数据！</h4></td></tr></table>";
+                        $("#message_list").html(htmlStr);
+                        layerPage(0);
+                    }
+                });
+            }
+
+            function layerPage(pageCount) {
+                document.getElementById("page_info").innerHTML = '目前正在第' + $("#pageIndex").val() + '页，一共有' + pageCount + '页';
+                laypage({
+                    cont: "page",
+                    pages: pageCount,
+                    curr: $("#pageIndex").val(),
+                    skip: true,
+                    jump: function (obj, first) {
+                        if (!first) {
+                            $("#pageIndex").val(obj.curr);
+                            getOrderList("search_form");
+                        }
+                    }
+                });
+            }
+
+        </script>
+    </head>
+    <body style="background-color: #e9f0fa;">
+        <div class="titleName"><div class="vline"></div>已入库订单</div>
+        <div class="myline"></div>
+
+        <div class="function">
+            <span class="left">
+                <a href="javascript:void(0)" id="importData" style="display: none;background-color: rgb(91,192,222)">数据导入</a>
+                <a href="javascript:void(0)" id="" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
+            </span>
+            <span class="right">
+                <a href="javascript:void(0)" id="search" style="background-color: rgb(91,192,222)">搜索</a>
+                <a href="javascript:void(0)" id="reset" style="background-color: rgb(91,184,93)">重置</a>
+            </span>
+        </div>
+        <div class="search">
+            <form id="search_form" class="form-inline">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="productLineId">生产线：</label>
+                                <select id="productLineIdSelect">
+                                    <option value="-1">--请选择--</option>
+                                    <option value="1">高压管</option>
+                                    <option value="2">压装</option>
+                                    <option value="3">成型工段</option>
+                                </select>
+                                <input type="hidden" name="productLineId" id="productLineId" value="-1"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="productName">物料名称：</label>
+                                <input type="text" name="productName" id="productName"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="productName">物料编码：</label>
+                                <input type="text" name="productCode" id="productCode"/>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="planFinishedTime">周转卡号:</label>
+                                <input type="text" name="cardNum" id="cardNum"/>
+                            </div>
+                            <input type="hidden" name="isFinished" id="isFinished" value="1" />
+                            <input type="hidden" name="isStorage" id="isStorage" value="1" />
+                            <input type="hidden" name="pageIndex" id="pageIndex" value="1" />
+                            <input type="hidden" name="pageSize" id="pageSize" value="11" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        
+        <div>
+            <div id="message_list">
+                <table class="detail_data">
+                    <tr class='table_header'><td>选择</td><td>序号</td><td>生产订单号</td><td>物料编码</td><td>物料名称</td><td>单位</td><td>计划完工数量</td><td>规格</td><td>计划完工日期</td><td>操作</td></tr>
+                </table>
+            </div>
+            <div id="page_div" class="page_div">
+                <div id="page"></div>
+                <div id="page_info"></div>
+            </div>
+            <div style="clear: both;float: none;"></div>
+        </div>
+    </body>
+</html>

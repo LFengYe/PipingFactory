@@ -1,0 +1,130 @@
+/* 
+    Document   : detail_style
+    Created on : 2014-9-18, 12:58:34
+    Author     : LFeng
+    Description:
+    Purpose of the stylesheet follows.
+*/
+.titleName{
+    margin-top:20px;
+    text-align:left;
+    color:rgb(91,184,93);
+    padding-left: 16px;
+}
+.titleName span{color: red;font-weight: bold;}
+.myline{
+    margin:5pt 8pt 5pt 8pt;
+    width:98%;
+    height:3px;
+    background-color:rgb(207,207,207);
+}
+.vline{
+    padding-right:5px;
+    margin-right: 10px;
+    display:inline;
+    width:4px;
+    height:10px;
+    background-color:rgb(84,156,255);
+}
+
+/**/
+.function{
+    width: 95%;
+    height: 30px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    line-height: 30px;
+    /* background-color: #fff;*/
+}
+.function .left{
+    float: left;
+    padding-left: 30px;
+}
+
+.function  .right{
+    float: right;
+    padding-right: 30px;
+}
+/*.function table {width: 100%;}*/
+.function  a{
+    text-decoration: none;
+    padding: 5px;
+    border-radius:5px;
+    color:#fff;
+}
+.function  a:hover{
+    text-decoration:underline;
+}
+/**/
+.search{
+    position: relative;
+    height: auto;
+    margin: 10px 30px;
+    text-align: left;
+    /* background-color: #fff; */
+}
+.search table{
+    width: 100%;
+}
+.search table span{
+    display: block;
+}
+.search table tr td select{
+    width: 169px;
+}
+.input_content{margin: 15px;}
+.input_content div{width: 24%;}
+
+/**/
+.detail_data {
+    table-layout: fixed;
+    clear: both;
+    width: 96%;
+    border-collapse: collapse;
+    text-align: center;
+    margin: 0 2%;
+}
+.detail_data tr {
+    height: 50px;
+    font-family: '微软雅黑', 'Times New Roman';
+}
+.detail_data tr td a {
+    cursor: pointer;
+    color: #15a4fa;
+}
+.detail_data tr td span{
+    margin: 0 5px;
+}
+.table_header {
+    background: #eef5ff;
+    color: #15a4fa;
+    border-bottom: 1px solid #e4e5e6;
+    font-weight: bold;
+    font-size: 20px;
+}
+.small{font-size: 14px;}
+.table_content {
+    background: #ffffff;
+    text-align: center;
+    color: #264f6f;
+    border-bottom: 1px solid #e4e5e6;
+}
+.table_content tr td input{
+    margin: 0px;
+    width: 30px;
+}
+.table_content1 {
+    background: #e9f0fa;
+    text-align: center;
+    color: #264f6f;
+    border-bottom: 1px solid #e4e5e6;
+}
+.table_border {
+    font-weight: normal;
+    width: 100%;
+    line-height: normal;
+    font-style: normal;
+    font-variant: normal;
+}
+.small_font{font-size: 14px;}

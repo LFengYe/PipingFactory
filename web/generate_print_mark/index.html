@@ -1,0 +1,81 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/bootstrap.min.css" />
+
+        <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="../javascript/script.js"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                $("#beginTime").bind("click", function () {
+                    new WdatePicker({dateFmt: 'yy/MM/dd', maxDate: getMaxDate()});
+                });
+                $("#endTime").bind("click", function () {
+                    new WdatePicker({dateFmt: 'yyyy-MM-dd', maxDate: getMaxDate()});
+                });
+                $("#generate_mark").bind("click", function () {
+                    var mark = "";
+                    var isOilPipe = $("#isOilPipe").val();
+                    if (isOilPipe == -1) {
+                        alert("请选择产品类型!");
+                        return;
+                    }
+                    if (isOilPipe == 1) {
+                        mark += "";
+                    }
+                    if (isOilPipe == 2) {
+                        mark += "CCC";
+                    }
+                    if ($("#partNumber").val() == -1) {
+                        alert("请选择零件编号!");
+                        return;
+                    }
+                    $("#print_mark").html(mark + "  " + $("#partNumber").val() + "  " + $("#beginTime").val());
+                });
+            };
+        </script>
+    </head>
+    <body style="background-color: #e9f0fa;">
+        <div class="titleName"><div class="vline"></div>打印标识生成</div>
+        <div class="myline"></div>
+
+        <div class="function">
+        </div>
+        <div class="search">
+            <form id="search_form" class="form-inline">
+                <div class="form-group">
+                    <label for="oilPipeSelect">产品类型：</label>
+                    <select onchange="document.getElementById('isOilPipe').value = this.options[this.selectedIndex].value;" id="oilPipeSelect">
+                        <option value="-1">--请选择--</option>
+                        <option value="1">油管产品</option>
+                        <option value="2">非油管产品</option>
+                    </select>
+                    <input type="hidden" name="isOilPipe" id="isOilPipe" value="-1"></input>
+                </div>
+                <div class="form-group">
+                    <label for="cardNum">周转卡号：</label>
+                    <input type="text" name="cardNum" id="cardNum" value="-1"></input>
+                </div>
+                <div class="form-group">
+                    <label for="beginTime">生产日期:</label>
+                    <input type="text" class="form-control" name="beginTime" id="beginTime"/>
+                </div>
+                <a class="btn btn-default" role="button" id="generate_mark">生成标识</a>
+            </form>
+            
+            <label for="print_mark">打码标识:</label>
+            <span id="print_mark"></span>
+        </div>
+    </body>
+</html>

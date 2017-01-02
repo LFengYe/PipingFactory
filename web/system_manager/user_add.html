@@ -1,0 +1,179 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
+        <link rel="stylesheet" href="../style/bootstrap.min.css" />
+
+        <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="../javascript/script.js"></script>
+        <script type="text/javascript" src="../javascript/projectScript.js"></script>
+        <script type="text/javascript">
+            var userTypeList = [
+                ["高压管_下料", "高压管_首末件检验", "高压管_打码", "高压管_管件预装", "高压管_总成扣压", "高压管_总成打压", "高压管_色标划线", "高压管_包装"],
+                ["压装_下料", "压装_彩标", "压装_打码", "压装_气动压床预装", "压装_划线", "压装_护管", "压装_包装", "压装_确认"],
+                ["成型_产品信息录入", "成型_下料", "成型_打码", "成型_划标记线", "成型_成型", "成型_加热冷却", "成型_截长"]
+            ];
+            var userStationId = [
+                [1, 2, 3, 4, 5, 6, 7, 8],
+                [11, 12, 13, 14, 15, 16, 17, 18],
+                [21, 22, 23, 24, 25, 26, 27]
+            ];
+            window.onload = function () {
+                $("#beginTime").bind("click", function () {
+                    new WdatePicker({dateFmt: 'yy/MM/dd', maxDate: getMaxDate()});
+                });
+                $("#userTypeSelect").bind("change", function (){
+                    var userType = $("#userTypeSelect").val();
+                    $("#userType").val(userType);
+                    if (userType === "1") {
+                        $("#stationDiv").css("display","block");
+                        $("#productLineDiv").css("display","block");
+                    } else {
+                        $("#stationDiv").css("display","none");
+                        $("#productLineDiv").css("display","none");
+                    }
+                });
+                $("#productLineIdSelect").bind("change", function (){
+                    var productLine = $("#productLineIdSelect").val();
+                    $("#stationIdSelect").empty();
+                    $("#stationIdSelect").append("<option value='-1'>--请选择--</option>");
+                    for (var i = 0; i < userTypeList[productLine - 1].length; i++) {
+                        $("#stationIdSelect").append("<option value=" + userStationId[productLine - 1][i] + ">" + userTypeList[productLine - 1][i] + "</option>");
+                    }
+                });
+                
+                $("#addUserInfo").bind("click", function () {
+                    if (checkInput()) {
+                        var sendBody = serializeForm("add_form");
+                        getDataInterface("addUserInfo.pc", sendBody, function (result) {
+                            var obj = JSON.parse(result);
+                            alert(obj.message);
+                            if (obj.status === 0) {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                            }
+                        });
+                    }
+                });
+            };
+            
+            function checkInput() {
+                if ($.trim($("#username").val()) === "") {
+                    $("#username").focus();
+                    alert("用户名不能为空！");
+                    return false;
+                }
+                if ($.trim($("#password").val()) === "") {
+                    $("#password").focus();
+                    alert("密码不能为空！");
+                    return false;
+                }
+                if ($.trim($("#confirm").val()) === "") {
+                    $("#confirm").focus();
+                    alert("确认密码不能为空！");
+                    return false;
+                }
+                if ($("#userType").val() === "-1") {
+                    alert("请选择用户类型！");
+                    return false;
+                }
+                if ($("#userType").val() === 1 && $("#stationId").val() === "-1") {
+                    alert("请选择工位！");
+                    return false;
+                }
+                if ($("#confirm").val() !== $("#password").val()) {
+                    alert("两次密码输入不一致！");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    </head>
+    <body style="background-color: #e9f0fa;">
+        <div class="titleName"><div class="vline"></div>新增用户</div>
+        <div class="myline"></div>
+
+        <div class="function">
+        </div>
+        <div class="search">
+        </div>
+        <div>
+            <form id="add_form" class="form-horizontal">
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="username">用户名:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="password">密码:</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="confirm">确认密码:</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="confirm" name="confirm" placeholder="请再次输入密码" />
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="userType">用户类型</label>
+                    <input type="hidden" id="userType" name="userType" value="-1" />
+                    <div class="col-sm-9">
+                        <select onchange="document.getElementById('userType').value = this.options[this.selectedIndex].value;" id="userTypeSelect">
+                            <option value="-1">--请选择--</option>
+                            <option value="1">工位用户</option>
+                            <option value="2">管理员用户</option>
+                            <option value="3">仓库管理用户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm" style="display: none;" id="productLineDiv">
+                    <label class="col-sm-2 control-label" for="productLine">生产线</label>
+                    <input type="hidden" id="productLine" name="productLine" value="-1" />
+                    <div class="col-sm-9">
+                        <select onchange="document.getElementById('productLine').value = this.options[this.selectedIndex].value;" id="productLineIdSelect">
+                            <option value="-1">--请选择--</option>
+                            <option value="1">高压管</option>
+                            <option value="2">压装</option>
+                            <option value="3">成型</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm" style="display: none;" id="stationDiv">
+                    <label class="col-sm-2 control-label" for="stationId">工位</label>
+                    <input type="hidden" id="stationId" name="stationId" value="-1" />
+                    <div class="col-sm-9">
+                        <select onchange="document.getElementById('stationId').value = this.options[this.selectedIndex].value;" id="stationIdSelect">
+                            <option value="-1">--请选择--</option>
+<!--                            <option value="11">压装_下料</option>
+                            <option value="12">压装_彩标</option>
+                            <option value="13">压装_打码</option>
+                            <option value="14">压装_气动压床预装</option>
+                            <option value="15">压装_划线</option>
+                            <option value="16">压装_护管</option>
+                            <option value="17">压装_包装</option>
+                            <option value="18">压装_确认</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group-sm form-group">
+                    <div class="col-sm-offset-2 col-sm-9">
+                        <a class="btn btn-default" id="addUserInfo">添加</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
