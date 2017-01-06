@@ -320,7 +320,7 @@ public class AppInterfaceServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
             out.print(json);
-            System.out.println(json);
+//            System.out.println(json);
         } finally {
             if (out != null) {
                 out.close();

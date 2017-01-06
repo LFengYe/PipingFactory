@@ -653,7 +653,7 @@ public class PCInterfaceServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
             out.print(json.replace("\\n", "").replace("\r", ""));
-            System.out.println(json);
+//            System.out.println(json);
         } finally {
             if (out != null) {
                 out.close();
