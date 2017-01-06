@@ -3,15 +3,15 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" type="text/css" />
-
+        <title></title>
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="../javascript/jquery.placeholder.min.js"></script>
         <script type="text/javascript" src="../javascript/JSON-js-master/json2.js"></script>
@@ -82,19 +82,20 @@ and open the template in the editor.
                 <div class="form-group-sm form-group">
                     <label for="productLineId" class="col-sm-2 control-label">生产线</label>
                     <div class="col-sm-9">
-                        <input type="hidden" name="productLineId" id="productLineId" placeholder="生产线" value="-1" />
+                        <input type="hidden" name="productLineId" id="productLineId" value="-1" />
                         <select onchange="document.getElementById('productLineId').value = this.options[this.selectedIndex].value;" id="productLineIdSelect">
                             <option value="-1">--请选择--</option>
                             <option value="1">高压管生产线</option>
                             <option value="2">压装生产线</option>
                             <option value="3">成型工段生产线</option>
+                            <option value="4">管束生产线</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group-sm form-group">
                     <label for="fileInput" class="col-sm-2 control-label">上传文件</label>
                     <div class="col-sm-9">
-                        <input type="file" class="form-control" name="fileInput" id="fileInput" placeholder="上传文件" />
+                        <input type="file" class="form-control" name="fileInput" id="fileInput" />
                     </div>
                 </div>
                 <div class="form-group-sm form-group">

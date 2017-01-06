@@ -62,7 +62,7 @@ public class AppInterfaceServlet extends HttpServlet {
                     if (null != result && result.size() > 0) {
                         UserInfo info = result.get(0);
                         if (password.equals(info.getPassword())) {
-                            if (info.getStationIndex() == 1) {
+                            if (info.getStationIndex() == 1) {//第一个工序
                                 OrderController controller1 = new OrderController();
                                 ArrayList<OrderInfo> orderInfos;
                                 if (info.getUserType() == -1) {//自动下料
@@ -94,7 +94,7 @@ public class AppInterfaceServlet extends HttpServlet {
                                         json = Units.objectToJson(-1, "暂无需要执行的计划单!", null);
                                     }
                                 }
-                            } else {
+                            } else {//后续工序
                                 json = Units.objectToJson(1, "", info);
                             }
                         } else {
@@ -165,8 +165,35 @@ public class AppInterfaceServlet extends HttpServlet {
                     ArrayList<OrderInfo> orderInfos = controller.getOrderInfo(cardNum, stationId, Units.getNowDate());
                     if (null != orderInfos && orderInfos.size() > 0) {
                         json = Units.objectToJson(0, "", orderInfos.get(0));
+                        String finishedSerial = controller.getFinishedSerial(orderInfos.get(0).getOrderId(), stationId);
+                        if (null != finishedSerial && finishedSerial.length() > 0) {
+                            json = String.format(json, finishedSerial);
+                        } else {
+                            json = String.format(json, "暂无已完成序号");
+                        }
                     } else {
                         json = Units.objectToJson(-1, "没有对应的周转卡号计划单, 请核对!", null);
+                    }
+                    break;
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="getOrderInfoWithId(根据订单ID, 获取订单信息)">
+                case "getOrderInfoWithId": {
+                    int orderId = paramsJson.getIntValue("orderId");
+                    int stationId = paramsJson.getIntValue("stationId");
+                    OrderController controller = new OrderController();
+                    OrderInfo info = controller.getOrderInfoWithId(orderId);
+                    if (null != info) {
+                        json = Units.objectToJson(0, "", info);
+                        String finishedSerial = controller.getFinishedSerial(info.getOrderId(), stationId);
+                        if (null != finishedSerial && finishedSerial.length() > 0) {
+                            json = String.format(json, finishedSerial);
+                        } else {
+                            json = String.format(json, "暂无已完成序号");
+                        }
+                    } else {
+                        json = Units.objectToJson(-1, "没有对应的计划单, 请核对!", null);
                     }
                     break;
                 }
@@ -203,7 +230,7 @@ public class AppInterfaceServlet extends HttpServlet {
                 }
                 //</editor-fold>
 
-                //<editor-fold desc="getUserInfo">
+                //<editor-fold desc="getUserInfo(根据用户名获取用户信息)">
                 case "getUserInfo": {
                     String username = paramsJson.getString("username");
                     UserController controller = new UserController();
@@ -257,18 +284,9 @@ public class AppInterfaceServlet extends HttpServlet {
                     int result = controller.updateXiaLiaoState(orderId, xiaLiaoState);
                     if (result == 0) {
                         json = Units.objectToJson(0, "更新成功!", null);
-                    } else if (result == 1) {
-                        json = Units.objectToJson(1, "管束状态已确定, 不能修改!", null);
                     } else {
-                        json = Units.objectToJson(-1, "数据获取失败!", null);
+                        json = Units.objectToJson(-1, "更新失败!", null);
                     }
-                    break;
-                }
-                //</editor-fold>
-
-                //<editor-fold desc="orderXiaLiaoFinished(订单下料完成, 管束用)">
-                case "orderXiaLiaoFinished": {
-                    
                     break;
                 }
                 //</editor-fold>
@@ -302,7 +320,7 @@ public class AppInterfaceServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
             out.print(json);
-//            System.out.println(json);
+            System.out.println(json);
         } finally {
             if (out != null) {
                 out.close();

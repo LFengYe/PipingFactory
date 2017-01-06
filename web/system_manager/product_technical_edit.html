@@ -3,8 +3,8 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -49,6 +49,16 @@ and open the template in the editor.
                         }
                     });
                 });
+                $("#guanShuEdit").bind("click", function() {
+                    var sendBody = serializeForm("guanShuEditForm");
+                    getDataInterface("updateTechnicalGuanShu.pc", sendBody, function(result){
+                        var obj = JSON.parse(result);
+                        alert(obj.message);
+                        if (obj.status === 0) {
+                            getProductTechnical("search_form");
+                        }
+                    });
+                });
                 $("#chengXingEdit").bind("click", function() {
                     var sendBody = serializeForm("chengXingEditForm");
                     getDataInterface("updateTechnicalChengXing.pc", sendBody, function(result){
@@ -69,9 +79,11 @@ and open the template in the editor.
                         }
                     });
                 });
+                
                 $("#gaoYaGuanEditDiv").css("display", "none");
                 $("#yaZhuangEditDiv").css("display", "none");
                 $("#chengXingEditDiv").css("display", "none");
+                $("#guanShuEditDiv").css("display", "none");
                 $("#zhuanEditDiv").css("display", "none");
                 $("#productLineId").val(getUrlParam("productLineId"));
                 $("#productCode").val(getUrlParam("productCode"));
@@ -93,6 +105,10 @@ and open the template in the editor.
                     if (productLineId === "3") {
                         $("#chengXingEditDiv").css("display", "block");
                         progressChengXingList(result);
+                    }
+                    if (productLineId === "4") {
+                        $("#guanShuEditDiv").css("display", "block");
+                        progressGuanShuList(result);
                     }
                     if (productLineId === "99") {
                         $("#zhuanEditDiv").css("display", "block");
@@ -174,6 +190,23 @@ and open the template in the editor.
                     alert("未获取到工艺数据!");
                 }
             }
+            function progressGuanShuList(result) {
+                var obj = JSON.parse(result);
+                if (obj.status === 0) {
+                    $("#technicalId_gs").val((obj.data[0].technicalID ? obj.data[0].technicalID : 0));
+                    $("#productCodeText_gs").html((obj.data[0].productCode ? obj.data[0].productCode : ""));
+                    $("#xiaLiaoNextStationSelect_gs").val((obj.data[0].xiaLiaoNextStation ? obj.data[0].xiaLiaoNextStation : 0));
+                    $("#xiaLiaoNextStation_gs").val((obj.data[0].xiaLiaoNextStation ? obj.data[0].xiaLiaoNextStation : 0));
+                    $("#caiBiaoNextStationSelect_gs").val((obj.data[0].caiBiaoNextStation ? obj.data[0].caiBiaoNextStation : 0));
+                    $("#caiBiaoNextStation_gs").val((obj.data[0].caiBiaoNextStation ? obj.data[0].caiBiaoNextStation : 0));
+                    $("#yaZhuangNextStationSelect_gs").val((obj.data[0].yaZhuangNextStation ? obj.data[0].yaZhuangNextStation : 0));
+                    $("#yaZhuangNextStation_gs").val((obj.data[0].yaZhuangNextStation ? obj.data[0].yaZhuangNextStation : 0));
+                    $("#huaXianNextStationSelect_gs").val((obj.data[0].huaXianNextStation ? obj.data[0].huaXianNextStation : 0));
+                    $("#huaXianNextStation_gs").val((obj.data[0].huaXianNextStation ? obj.data[0].huaXianNextStation : 0));
+                } else {
+                    alert("未获取到工艺数据!");
+                }
+            }
             function progressZhuanList(result) {
                 var obj = JSON.parse(result);
                 if (obj.status === 0) {
@@ -220,8 +253,8 @@ and open the template in the editor.
 
         <div class="function">
             <span class="left">
-                <a href="javascript:history.back(-1)" id="" style="background-color: rgb(91,192,222)">返回</a>
-                <a href="javascript:void(0)" id="" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
+                <a href="javascript:history.back(-1)" style="background-color: rgb(91,192,222)">返回</a>
+                <a href="javascript:void(0)" id="batchDelate" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
             </span>
             <span class="right" style="display: none;">
                 <a href="javascript:void(0)" id="search" style="background-color: rgb(91,192,222)">搜索</a>
@@ -556,6 +589,61 @@ and open the template in the editor.
                     </table>
                     <center>
                         <a class="btn btn-default" style="margin-top: 50px;" role="button" id="chengXingEdit">保存</a>
+                    </center>
+                </form>
+            </div>
+            
+            <div id="guanShuEditDiv">
+                <form id="guanShuEditForm">
+                    <input type="hidden" name="technicalId_gs" id="technicalId_gs" />
+                    <table class="detail_data">
+                        <tr class='table_header'><td>物料编码</td><td>下料</td><td>彩标</td><td>压装</td><td>划线</td></tr>
+                        <tr class="tab-content">
+                            <td><span id="productCodeText_gs">物料编码</span></td>
+                            <td>
+                                <select id="xiaLiaoNextStationSelect_gs">
+                                    <option value="0">无</option>
+                                    <option value="31">下料</option>
+                                    <option value="32">彩标</option>
+                                    <option value="33">成型</option>
+                                    <option value="34">划线</option>
+                                </select>
+                                <input type="hidden" name="xiaLiaoNextStation_gs" id="xiaLiaoNextStation_gs" value="0" />
+                            </td>
+                            <td>
+                                <select id="caiBiaoNextStationSelect_gs">
+                                    <option value="0">无</option>
+                                    <option value="31">下料</option>
+                                    <option value="32">彩标</option>
+                                    <option value="33">成型</option>
+                                    <option value="34">划线</option>
+                                </select>
+                                <input type="hidden" name="caiBiaoNextStation_gs" id="caiBiaoNextStation_gs" value="0" />
+                            </td>
+                            <td>
+                                <select id="yaZhuangNextStationSelect_gs">
+                                    <option value="0">无</option>
+                                    <option value="31">下料</option>
+                                    <option value="32">彩标</option>
+                                    <option value="33">成型</option>
+                                    <option value="34">划线</option>
+                                </select>
+                                <input type="hidden" name="yaZhuangNextStation_gs" id="yaZhuangNextStation_gs" value="0" />
+                            </td>
+                            <td>
+                                <select id="huaXianNextStationSelect_gs">
+                                    <option value="0">无</option>
+                                    <option value="31">下料</option>
+                                    <option value="32">彩标</option>
+                                    <option value="33">成型</option>
+                                    <option value="34">划线</option>
+                                </select>
+                                <input type="hidden" name="huaXianNextStation_gs" id="huaXianNextStation_gs" value="0" />
+                            </td>
+                        </tr>
+                    </table>
+                    <center>
+                        <a class="btn btn-default" style="margin-top: 50px;" role="button" id="guanShuEdit">保存</a>
                     </center>
                 </form>
             </div>

@@ -36,6 +36,7 @@ public class OrderInfo {
     private String yaZhuangOrHuaXian;
     private String yaZhuangOrHuaXianSort;
     private String productBatch;
+    private String productLength;
 
     public int getOrderId() {
         return orderId;
@@ -137,6 +138,10 @@ public class OrderInfo {
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productBatch) ? ("") : (productBatch));
                     break;
                 }
+                case "ProductLengthValue": {
+                    object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productLength) ? ("") : (productLength));
+                    break;
+                }
                 case "MarkColorValue": {
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productColor) ? ("") : (productColor));
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(2).getAsJsonObject().addProperty("fieldValue", (null == productColor1) ? ("") : (productColor1));
@@ -147,7 +152,9 @@ public class OrderInfo {
                 }
             }
         }
+        
         Gson gson = new Gson();
+        /*
         if (isGuanShu == 1) {
             object.addProperty("childRowNum", 7);
             JsonElement serialElement = parser.parse("[{\"fieldName\":\"FinishedSerial\", \"fieldValue\":\"已完成序号\", \"viewType\":1,\"fieldType\":3,\"childRowNum\":1,\"textHorizon\":true,\"width\":1},"
@@ -156,6 +163,7 @@ public class OrderInfo {
                     + "{\"fieldName\":\"GuanShuSerial\", \"fieldValue\":\"\", \"viewType\":2,\"fieldType\":1,\"childRowNum\":1,\"textHorizon\":true,\"width\":1}]");
             object.add("rowData7", serialElement);
         }
+                */
         this.productLineStructJson = gson.toJson(object);
 //        System.out.println("productLineStructJson" + this.productLineStructJson);
     }
@@ -274,6 +282,14 @@ public class OrderInfo {
 
     public void setProductBatch(String productBatch) {
         this.productBatch = productBatch;
+    }
+
+    public String getProductLength() {
+        return productLength;
+    }
+
+    public void setProductLength(String productLength) {
+        this.productLength = productLength;
     }
 
 }

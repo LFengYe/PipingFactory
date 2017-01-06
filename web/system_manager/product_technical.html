@@ -3,15 +3,15 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" />
-
+        <title></title>
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
@@ -23,7 +23,8 @@ and open the template in the editor.
                 ["无", "检验", "下料", "打码", "预装", "扣压", "打压", "划线、色标", "包装"],
                 ["无", "下料", "彩标", "打码", "压装", "划线", "护管", "包装"],
                 ["无", "下料", "打码", "划线", "成型", "加热冷却", "截长"],
-                ["无", "成型信息录入", "成型下料", "成型打码", "成型划线", "成型成型", "成型加热冷却", "成型截长", "压装下料", "压装彩标", "压装打码", "压装压装", "压装划线", "压装护管", "压装包装"]];
+                ["无", "成型信息录入", "成型下料", "成型打码", "成型划线", "成型成型", "成型加热冷却", "成型截长", "压装下料", "压装彩标", "压装打码", "压装压装", "压装划线", "压装护管", "压装包装"],
+                ["无", "下料", "彩标", "压装", "划线"]];
 
             window.onload = function () {
 //                alert($($("#productLineIdSelect").selector + "~input").val());
@@ -71,6 +72,9 @@ and open the template in the editor.
                     }
                     if (productLineId === "3") {
                         progressChengXingList(result);
+                    }
+                    if (productLineId === "4") {
+                        progressGuanShuList(result);
                     }
                     if (productLineId === "99") {
                         progressZhuanList(result);
@@ -215,6 +219,39 @@ and open the template in the editor.
                     layerPage(0);
                 }
             }
+            function progressGuanShuList(result) {
+                var obj = JSON.parse(result);
+                if (obj.status === 0) {
+                    var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>物料编码</td><td>下料</td><td>彩标</td><td>压装</td><td>划线</td><td>操作</td></tr>";
+                    for (var i in obj.data) {
+                        htmlStr += "<tr class='table_content'>";
+                        htmlStr += "<td><input type='checkbox' /></td>";
+                        htmlStr += "<td>" + (obj.data[i].technicalID ? obj.data[i].technicalID : "") + "</td>";
+                        htmlStr += "<td>" + (obj.data[i].productCode ? obj.data[i].productCode : "") + "</td>";
+                        htmlStr += "<td>" + stationList[2][(obj.data[i].xiaLiaoNextStation ? obj.data[i].xiaLiaoNextStation : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[2][(obj.data[i].caiBiaoNextStation ? obj.data[i].caiBiaoNextStation : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[2][(obj.data[i].yaZhuangNextStation ? obj.data[i].yaZhuangNextStation : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[2][(obj.data[i].huaXianNextStation ? obj.data[i].huaXianNextStation : 0)] + "</td>";
+                        htmlStr += "<td>";
+                        htmlStr += "<a href='product_technical_edit.html?productLineId=" + $("#productLineId").val() + "&productCode=" + obj.data[i].productCode + "'>编辑</a>";
+                        htmlStr += "<span>|</span><a href='javascript:deleteTechnical(" + $("#productLineId").val() + "," + obj.data[i].technicalID + ")'>删除</a>";
+                        htmlStr += "</td>";
+                        htmlStr += "</tr>";
+                    }
+                    htmlStr += "</table>";
+                    $("#message_list").html(htmlStr);
+
+                    var recordCount = obj.count;
+                    var pageSize = $("#pageSize").val();
+                    var pageCount = parseInt((recordCount % pageSize === 0) ? (recordCount / pageSize) : (recordCount / pageSize + 1));
+                    layerPage(pageCount);
+                } else {
+                    var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>物料编码</td><td>下料</td><td>彩标</td><td>压装</td><td>划线</td><td>操作</td></tr>";
+                    htmlStr += "<tr><td><h4>没有查询到相关数据！</h4></td></tr></table>";
+                    $("#message_list").html(htmlStr);
+                    layerPage(0);
+                }
+            }
             function progressZhuanList(result) {
                 var obj = JSON.parse(result);
                 if (obj.status === 0) {
@@ -267,7 +304,7 @@ and open the template in the editor.
         <div class="function">
             <span class="left">
                 <a href="javascript:void(0)" id="technicalAdd" style="background-color: rgb(91,192,222)">新增</a>
-                <a href="javascript:void(0)" id="" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
+                <a href="javascript:void(0)" id="batchDelate" style="display: none;background-color: rgb(218,83,79)">批量删除</a>
             </span>
             <span class="right">
                 <a href="javascript:void(0)" id="search" style="background-color: rgb(91,192,222)">搜索</a>
@@ -285,6 +322,7 @@ and open the template in the editor.
                                     <option value="1">高压管</option>
                                     <option value="2" selected>压装</option>
                                     <!--<option value="3">成型工段</option>-->
+                                    <option value="4">管束</option>
                                     <option value="99">多生产线</option>
                                 </select>
                                 <input type="hidden" name="productLineId" id="productLineId" value="2"/>

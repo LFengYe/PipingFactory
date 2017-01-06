@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cn.bean.StationInfo;
 import com.cn.bean.TechnicalChengXing;
 import com.cn.bean.TechnicalGaoYaGuan;
+import com.cn.bean.TechnicalGuanShu;
 import com.cn.bean.TechnicalYaZhuang;
 import com.cn.bean.TechnicalZhuan;
 import com.cn.bean.pc.OrderInfo;
@@ -241,7 +242,12 @@ public class PCInterfaceServlet extends HttpServlet {
                     int productLineId = paramsJson.getIntValue("productLineId");
                     int isEmergency = paramsJson.getIntValue("isEmergency");
                     OrderController controller = new OrderController();
-                    int result = controller.importOrder(loadpath + fileName, productLineId, isEmergency);
+                    int result;
+                    if (productLineId == 4) {
+                        result = controller.importOrder(loadpath + fileName, productLineId, isEmergency, 1);
+                    } else {
+                        result = controller.importOrder(loadpath + fileName, productLineId, isEmergency, 0);
+                    }
                     if (result == 0) {
                         json = Units.objectToJson(0, "导入成功!", null);
                     } else {
@@ -339,6 +345,14 @@ public class PCInterfaceServlet extends HttpServlet {
                         ArrayList<TechnicalChengXing> result = controller.getTechnicalList_ChengXing(productCode, pageIndex, pageSize);
                         if (null != result && result.size() > 0) {
                             json = Units.listToJson(result, TechnicalChengXing.getRecordCount());
+                        } else {
+                            json = Units.objectToJson(-1, "记录为空", null);
+                        }
+                    }
+                    if (productLineId == 4) {
+                        ArrayList<TechnicalGuanShu> result = controller.getTechnicalList_GuanShu(productCode, pageIndex, pageSize);
+                        if (null != result && result.size() > 0) {
+                            json = Units.listToJson(result, TechnicalGuanShu.getRecordCount());
                         } else {
                             json = Units.objectToJson(-1, "记录为空", null);
                         }
@@ -567,8 +581,51 @@ public class PCInterfaceServlet extends HttpServlet {
                     break;
                 }
                 //</editor-fold>
-                
-                //<editor-fold>
+
+                //<editor-fold desc="addTechnicalGuanShu">
+                case "addTechnicalGuanShu": {
+                    int productLineId = paramsJson.getIntValue("productLineId");
+                    if (productLineId == 2) {
+                        String productCode = paramsJson.getString("productCode_gs");
+                        int xiaLiaoNextStation = paramsJson.getIntValue("xiaLiaoNextStation_gs");
+                        int caiBiaoNextStation = paramsJson.getIntValue("caiBiaoNextStation_gs");
+                        int yaZhuangNextStation = paramsJson.getIntValue("yaZhuangNextStation_gs");
+                        int huaXianNextStation = paramsJson.getIntValue("huaXianNextStation_gs");
+                        TechnicalController controller = new TechnicalController();
+                        int result = controller.addTechnical_GuanShu(productCode, xiaLiaoNextStation, caiBiaoNextStation, yaZhuangNextStation, huaXianNextStation);
+                        if (result == 0) {
+                            json = Units.objectToJson(result, "添加成功!", null);
+                        } else if (result == 1) {
+                            json = Units.objectToJson(result, "物料编号已存在!", null);
+                        } else {
+                            json = Units.objectToJson(result, "添加失败!", null);
+                        }
+                    } else {
+                        json = Units.objectToJson(-1, "添加失败!", null);
+                    }
+                    break;
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="updateTechnicalGuanShu">
+                case "updateTechnicalGuanShu": {
+                    int technicalId = paramsJson.getIntValue("technicalId");
+                    int xiaLiaoNextStation = paramsJson.getIntValue("xiaLiaoNextStation_gs");
+                    int caiBiaoNextStation = paramsJson.getIntValue("caiBiaoNextStation_gs");
+                    int yaZhuangNextStation = paramsJson.getIntValue("yaZhuangNextStation_gs");
+                    int huaXianNextStation = paramsJson.getIntValue("huaXianNextStation_gs");
+                    TechnicalController controller = new TechnicalController();
+                    int result = controller.updateTechnical_GuanShu(technicalId, xiaLiaoNextStation, caiBiaoNextStation, yaZhuangNextStation, huaXianNextStation);
+                    if (result == 0) {
+                        json = Units.objectToJson(result, "修改成功!", null);
+                    } else {
+                        json = Units.objectToJson(result, "修改失败!", null);
+                    }
+                    break;
+                }
+                //</editor-fold>
+
+                //<editor-fold desc="deleteTechnical">
                 case "deleteTechnical": {
                     int technicalId = paramsJson.getIntValue("technicalId");
                     int productLineId = paramsJson.getIntValue("productLineId");
@@ -596,7 +653,7 @@ public class PCInterfaceServlet extends HttpServlet {
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
             out.print(json.replace("\\n", "").replace("\r", ""));
-//            System.out.println(json);
+            System.out.println(json);
         } finally {
             if (out != null) {
                 out.close();

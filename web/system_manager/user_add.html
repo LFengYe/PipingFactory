@@ -3,8 +3,8 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -21,12 +21,14 @@ and open the template in the editor.
             var userTypeList = [
                 ["高压管_下料", "高压管_首末件检验", "高压管_打码", "高压管_管件预装", "高压管_总成扣压", "高压管_总成打压", "高压管_色标划线", "高压管_包装"],
                 ["压装_下料", "压装_彩标", "压装_打码", "压装_气动压床预装", "压装_划线", "压装_护管", "压装_包装", "压装_确认"],
-                ["成型_产品信息录入", "成型_下料", "成型_打码", "成型_划标记线", "成型_成型", "成型_加热冷却", "成型_截长"]
+                ["成型_产品信息录入", "成型_下料", "成型_打码", "成型_划标记线", "成型_成型", "成型_加热冷却", "成型_截长"],
+                ["管束_下料", "管束_彩标", "管束_压装", "管束_划线"]
             ];
             var userStationId = [
                 [1, 2, 3, 4, 5, 6, 7, 8],
                 [11, 12, 13, 14, 15, 16, 17, 18],
-                [21, 22, 23, 24, 25, 26, 27]
+                [21, 22, 23, 24, 25, 26, 27],
+                [31, 32, 33, 34]
             ];
             window.onload = function () {
                 $("#beginTime").bind("click", function () {
@@ -128,7 +130,7 @@ and open the template in the editor.
                     </div>
                 </div>
                 <div class="form-group form-group-sm">
-                    <label class="col-sm-2 control-label" for="userType">用户类型</label>
+                    <label class="col-sm-2 control-label" for="userTypeSelect">用户类型</label>
                     <input type="hidden" id="userType" name="userType" value="-1" />
                     <div class="col-sm-9">
                         <select onchange="document.getElementById('userType').value = this.options[this.selectedIndex].value;" id="userTypeSelect">
@@ -148,6 +150,7 @@ and open the template in the editor.
                             <option value="1">高压管</option>
                             <option value="2">压装</option>
                             <option value="3">成型</option>
+                            <option value="4">管束</option>
                         </select>
                     </div>
                 </div>

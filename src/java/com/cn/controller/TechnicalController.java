@@ -7,6 +7,7 @@ package com.cn.controller;
 
 import com.cn.bean.TechnicalChengXing;
 import com.cn.bean.TechnicalGaoYaGuan;
+import com.cn.bean.TechnicalGuanShu;
 import com.cn.bean.TechnicalYaZhuang;
 import com.cn.bean.TechnicalZhuan;
 import com.cn.util.DatabaseOpt;
@@ -745,6 +746,146 @@ public class TechnicalController {
                 result.add(info);
             }
             TechnicalZhuan.setRecordCount(statement.getInt("recordCount"));
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 获取管束工艺
+     * @param productCode
+     * @param pageIndex
+     * @param pageSize
+     * @return 
+     */
+    public ArrayList<TechnicalGuanShu> getTechnicalList_GuanShu(String productCode, int pageIndex, int pageSize) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        ArrayList<TechnicalGuanShu> result = null;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            result = new ArrayList<>();
+            statement = conn.prepareCall("{call [tbGetTechnicalList](?, ?, ?, ?, ?)}");
+            statement.setInt("productLineId", 4);
+            statement.setString("productCode", productCode);
+            statement.setInt("pageIndex", pageIndex);
+            statement.setInt("pageSize", pageSize);
+            statement.registerOutParameter("recordCount", Types.INTEGER);
+            ResultSet set = statement.executeQuery();
+            while (set.next()) {
+                TechnicalGuanShu info = new TechnicalGuanShu();
+                info.setTechnicalID(set.getInt("TechnicalID"));
+                info.setProductCode(set.getString("ProductCode"));
+                info.setProductLength(set.getString("ProductLength"));
+                info.setProductHuGuang(set.getString("HuGuangLength"));
+                info.setFirstStation(set.getInt("FirstStation"));
+                info.setXiaLiaoNextStation(set.getInt("XiaLiaoNextStation"));
+                info.setCaiBiaoNextStation(set.getInt("CaiBiaoNextStation"));
+                info.setYaZhuangNextStation(set.getInt("YaZhuangNextStation"));
+                info.setHuaXianNextStation(set.getInt("HuaXianNextStation"));
+                result.add(info);
+            }
+            TechnicalGuanShu.setRecordCount(statement.getInt("recordCount"));
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 添加管束工艺
+     * @param productCode
+     * @param xiaLiaoNextStation
+     * @param caiBiaoNextStation
+     * @param yaZhuangNextStation
+     * @param huaXianNextStation
+     * @return 
+     */
+    public int addTechnical_GuanShu(String productCode, int xiaLiaoNextStation, int caiBiaoNextStation, int yaZhuangNextStation, int huaXianNextStation) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        int result = -1;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            statement = conn.prepareCall("{call [tbAddTechnicalGuanShu](?, ?, ?, ?, ?, ?)}");
+            statement.setString("productCode", productCode);
+            statement.setInt("xiaLiaoNextStation", xiaLiaoNextStation);
+            statement.setInt("caiBiaoNextStation", caiBiaoNextStation);
+            statement.setInt("yaZhuangNextStation", yaZhuangNextStation);
+            statement.setInt("huaXianNextStation", huaXianNextStation);
+            statement.registerOutParameter("result", Types.INTEGER);
+            statement.executeUpdate();
+            result = statement.getInt("result");
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 更新管束工艺
+     * @param technicalId
+     * @param xiaLiaoNextStation
+     * @param caiBiaoNextStation
+     * @param yaZhuangNextStation
+     * @param huaXianNextStation
+     * @return 
+     */
+    public int updateTechnical_GuanShu(int technicalId, int xiaLiaoNextStation, int caiBiaoNextStation, int yaZhuangNextStation, int huaXianNextStation) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        int result = -1;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            statement = conn.prepareCall("{call [tbUpdateTechnicalGuanShu](?, ?, ?, ?, ?, ?)}");
+            statement.setInt("technicalId", technicalId);
+            statement.setInt("xiaLiaoNextStation", xiaLiaoNextStation);
+            statement.setInt("caiBiaoNextStation", caiBiaoNextStation);
+            statement.setInt("yaZhuangNextStation", yaZhuangNextStation);
+            statement.setInt("huaXianNextStation", huaXianNextStation);
+            statement.registerOutParameter("result", Types.INTEGER);
+            statement.executeUpdate();
+            result = statement.getInt("result");
         } catch (SQLException ex) {
             logger.error("数据库操作错误", ex);
         } finally {

@@ -42,7 +42,7 @@ import org.apache.poi.ss.usermodel.Cell;
 public class OrderController {
 
     private static final Logger logger = Logger.getLogger(OrderController.class);
-    private final String[] productInfoField = {"MarkColorValue", "MarkColorValue1", "ProductGraphicValue", "YaZhuangOrHuaXianValue", "YaZhuangOrHuaXianSortValue", "ProductBatchValue"};
+    private final String[] productInfoField = {"MarkColorValue", "MarkColorValue1", "ProductGraphicValue", "YaZhuangOrHuaXianValue", "YaZhuangOrHuaXianSortValue", "ProductBatchValue", "ProductLengthValue"};
 
     /**
      * APP端获取第一个工位订单信息
@@ -245,6 +245,197 @@ public class OrderController {
     }
 
     /**
+     * APP段获取可能自动下料的列表, 用工位用户自行选择
+     *
+     * @param pageSize
+     * @param pageIndex
+     * @return
+     */
+    public ArrayList<OrderInfo> getCouldAutoXiaLiaoOrder(int pageSize, int pageIndex) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        ArrayList<OrderInfo> result = null;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            result = new ArrayList<>();
+            statement = conn.prepareCall("{call [tbGetOrderList_CouldAutoXiaLiao](?, ?, ?)}");
+            statement.setInt("pageIndex", pageIndex);
+            statement.setInt("pageSize", pageSize);
+            statement.registerOutParameter("recordCount", Types.INTEGER);
+            ResultSet set = statement.executeQuery();
+            while (set.next()) {
+                OrderInfo info = new OrderInfo();
+                info.setOrderId(set.getInt("OrderId"));
+                info.setProductCommand(set.getString("ProductCommand"));
+                info.setProductName(set.getString("ProductName"));
+                info.setProductCode(set.getString("ProductCode"));
+                info.setGraphicCode(set.getString("GraphicCode"));
+                info.setCustomerName(set.getString("CustomerName"));
+                info.setPlanNum(set.getInt("PlanNum"));
+                info.setProductColor(set.getString("ProductColor"));
+                info.setPlanFinishTime(set.getString("PlanFinishedTime"));
+                info.setProductStandard(set.getString("ProductStandard"));
+                info.setProductUnit(set.getString("ProductUnit"));
+                result.add(info);
+            }
+            OrderInfo.setRecordCount(statement.getInt("recordCount"));
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 根据订单ID获取订单信息
+     *
+     * @param orderId
+     * @return
+     */
+    public com.cn.bean.OrderInfo getOrderInfoWithId(int orderId) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        com.cn.bean.OrderInfo info = null;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            statement = conn.prepareCall("select * from tbOrder_Station where OrderId = ?");
+            statement.setInt(1, orderId);
+            ResultSet set = statement.executeQuery();
+            while (set.next()) {
+                info = new com.cn.bean.OrderInfo();
+                info.setOrderId(set.getInt("OrderId"));
+                info.setProductCommand(set.getString("ProductCommand"));
+                info.setProductName(set.getString("ProductName"));
+                info.setProductCode(set.getString("ProductCode"));
+                info.setGraphicCode(set.getString("GraphicCode"));
+                info.setCustomerName(set.getString("CustomerName"));
+                info.setProductStandard(set.getString("ProductStandard"));
+                info.setProductBatch(set.getString("ProductBatch"));
+                info.setYaZhuangOrHuaXian(set.getString("YaZhuangOrHuaXian"));
+                info.setYaZhuangOrHuaXianSort(set.getString("YaZhuangOrHuaXianSort"));
+                info.setProductLength(set.getString("ProductLength"));
+                info.setPlanNum(set.getInt("PlanNum"));
+                info.setIsGuanShu(set.getInt("IsGuanShu"));
+                info.setProductColor(set.getString("ProductColor"));
+                info.setProductColor1(set.getString("ProductColor1"));
+                info.setStationStructJson(set.getString("StationStructJson"));
+                info.setProductLineShort(set.getString("ProductLineShort"));
+                info.setProductLineStructJson(set.getString("ProductLineStructJson"));
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat format1 = new SimpleDateFormat("yy/MM/dd");
+                Date date = format.parse(set.getString("PlanFinishedTime"));
+                info.setPlanFinishedTime(format1.format(date));
+            }
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } catch (ParseException ex) {
+            logger.error("日期格式转换错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return info;
+    }
+
+    /**
+     * PC端获取订单列表
+     *
+     * @param productCommand
+     * @param productName
+     * @param productCode
+     * @param productLineId
+     * @param isFinished
+     * @param isXiaLiaoFinished
+     * @param isStorage
+     * @param isGuanShu
+     * @param finishTime
+     * @param cardNum
+     * @param pageSize
+     * @param pageIndex
+     * @return
+     */
+    public ArrayList<OrderInfo> getOrderList(String productCommand, String productName, String productCode, int productLineId, int isFinished,
+            int isXiaLiaoFinished, int isStorage, int isGuanShu, String finishTime, String cardNum, int pageSize, int pageIndex) {
+        DatabaseOpt opt;
+        Connection conn = null;
+        CallableStatement statement = null;
+        ArrayList<OrderInfo> result = null;
+        try {
+            opt = new DatabaseOpt();
+            conn = opt.getConnect();
+            result = new ArrayList<>();
+            statement = conn.prepareCall("{call [tbGetOrderList](?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            statement.setString("productCommand", productCommand);
+            statement.setString("productName", productName);
+            statement.setString("productCode", productCode);
+            statement.setString("planFinishedTime", finishTime);
+            statement.setString("cardNum", cardNum);
+            statement.setInt("productLineId", productLineId);
+            statement.setInt("isFinished", isFinished);
+            statement.setInt("isXiaLiaoFinished", isXiaLiaoFinished);
+            statement.setInt("isStorage", isStorage);
+            statement.setInt("isGuanShu", isGuanShu);
+            statement.setInt("pageIndex", pageIndex);
+            statement.setInt("pageSize", pageSize);
+            statement.registerOutParameter("recordCount", Types.INTEGER);
+            ResultSet set = statement.executeQuery();
+            while (set.next()) {
+                OrderInfo info = new OrderInfo();
+                info.setOrderId(set.getInt("OrderId"));
+                info.setProductCommand(set.getString("ProductCommand"));
+                info.setProductName(set.getString("ProductName"));
+                info.setProductCode(set.getString("ProductCode"));
+                info.setGraphicCode(set.getString("GraphicCode"));
+                info.setCustomerName(set.getString("CustomerName"));
+                info.setPlanNum(set.getInt("PlanNum"));
+                info.setProductColor(set.getString("ProductColor"));
+                info.setPlanFinishTime(set.getString("PlanFinishedTime"));
+                info.setProductStandard(set.getString("ProductStandard"));
+                info.setProductUnit(set.getString("ProductUnit"));
+                info.setCardNum(set.getString("CardNum"));
+                result.add(info);
+            }
+            OrderInfo.setRecordCount(statement.getInt("recordCount"));
+        } catch (SQLException ex) {
+            logger.error("数据库操作错误", ex);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                logger.error("数据库关闭连接错误", ex);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 管束未完成订单 完成状态为未完成, 管束状态为管束
      *
      * @param pageSize
@@ -252,7 +443,7 @@ public class OrderController {
      * @return
      */
     public ArrayList<OrderInfo> getUnFinishedList(int pageSize, int pageIndex) {
-        return getOrderList(null, null, null, -1, 0, -1, -1, 1, null, null, pageSize, pageIndex);
+        return getOrderList(null, null, null, 4, 0, -1, -1, 1, null, null, pageSize, pageIndex);
     }
 
     /**
@@ -565,145 +756,16 @@ public class OrderController {
     }
 
     /**
-     * APP段获取可能自动下料的列表, 用工位用户自行选择
-     *
-     * @param pageSize
-     * @param pageIndex
-     * @return
-     */
-    public ArrayList<OrderInfo> getCouldAutoXiaLiaoOrder(int pageSize, int pageIndex) {
-        DatabaseOpt opt;
-        Connection conn = null;
-        CallableStatement statement = null;
-        ArrayList<OrderInfo> result = null;
-        try {
-            opt = new DatabaseOpt();
-            conn = opt.getConnect();
-            result = new ArrayList<>();
-            statement = conn.prepareCall("{call [tbGetOrderList_CouldAutoXiaLiao](?, ?, ?)}");
-            statement.setInt("pageIndex", pageIndex);
-            statement.setInt("pageSize", pageSize);
-            statement.registerOutParameter("recordCount", Types.INTEGER);
-            ResultSet set = statement.executeQuery();
-            while (set.next()) {
-                OrderInfo info = new OrderInfo();
-                info.setOrderId(set.getInt("OrderId"));
-                info.setProductCommand(set.getString("ProductCommand"));
-                info.setProductName(set.getString("ProductName"));
-                info.setProductCode(set.getString("ProductCode"));
-                info.setGraphicCode(set.getString("GraphicCode"));
-                info.setCustomerName(set.getString("CustomerName"));
-                info.setPlanNum(set.getInt("PlanNum"));
-                info.setProductColor(set.getString("ProductColor"));
-                info.setPlanFinishTime(set.getString("PlanFinishedTime"));
-                info.setProductStandard(set.getString("ProductStandard"));
-                info.setProductUnit(set.getString("ProductUnit"));
-                result.add(info);
-            }
-            OrderInfo.setRecordCount(statement.getInt("recordCount"));
-        } catch (SQLException ex) {
-            logger.error("数据库操作错误", ex);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                logger.error("数据库关闭连接错误", ex);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * PC端获取订单列表
-     *
-     * @param productCommand
-     * @param productName
-     * @param productCode
-     * @param productLineId
-     * @param isFinished
-     * @param isXiaLiaoFinished
-     * @param isStorage
-     * @param isGuanShu
-     * @param finishTime
-     * @param cardNum
-     * @param pageSize
-     * @param pageIndex
-     * @return
-     */
-    public ArrayList<OrderInfo> getOrderList(String productCommand, String productName, String productCode, int productLineId, int isFinished,
-            int isXiaLiaoFinished, int isStorage, int isGuanShu, String finishTime, String cardNum, int pageSize, int pageIndex) {
-        DatabaseOpt opt;
-        Connection conn = null;
-        CallableStatement statement = null;
-        ArrayList<OrderInfo> result = null;
-        try {
-            opt = new DatabaseOpt();
-            conn = opt.getConnect();
-            result = new ArrayList<>();
-            statement = conn.prepareCall("{call [tbGetOrderList](?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-            statement.setString("productCommand", productCommand);
-            statement.setString("productName", productName);
-            statement.setString("productCode", productCode);
-            statement.setString("planFinishedTime", finishTime);
-            statement.setString("cardNum", cardNum);
-            statement.setInt("productLineId", productLineId);
-            statement.setInt("isFinished", isFinished);
-            statement.setInt("isXiaLiaoFinished", isXiaLiaoFinished);
-            statement.setInt("isStorage", isStorage);
-            statement.setInt("isGuanShu", isGuanShu);
-            statement.setInt("pageIndex", pageIndex);
-            statement.setInt("pageSize", pageSize);
-            statement.registerOutParameter("recordCount", Types.INTEGER);
-            ResultSet set = statement.executeQuery();
-            while (set.next()) {
-                OrderInfo info = new OrderInfo();
-                info.setOrderId(set.getInt("OrderId"));
-                info.setProductCommand(set.getString("ProductCommand"));
-                info.setProductName(set.getString("ProductName"));
-                info.setProductCode(set.getString("ProductCode"));
-                info.setGraphicCode(set.getString("GraphicCode"));
-                info.setCustomerName(set.getString("CustomerName"));
-                info.setPlanNum(set.getInt("PlanNum"));
-                info.setProductColor(set.getString("ProductColor"));
-                info.setPlanFinishTime(set.getString("PlanFinishedTime"));
-                info.setProductStandard(set.getString("ProductStandard"));
-                info.setProductUnit(set.getString("ProductUnit"));
-                info.setCardNum(set.getString("CardNum"));
-                result.add(info);
-            }
-            OrderInfo.setRecordCount(statement.getInt("recordCount"));
-        } catch (SQLException ex) {
-            logger.error("数据库操作错误", ex);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                logger.error("数据库关闭连接错误", ex);
-            }
-        }
-        return result;
-    }
-
-    /**
      * 导入订单(需要检测产品编号, 在工艺表中是否存在)
      *
      * @param fileName
      * @param productLineId
      * @param isEmergency
+     * @param isGuanShu
      * @return
      * @throws IllegalStateException
      */
-    public int importOrder(String fileName, int productLineId, int isEmergency) throws IllegalStateException {
+    public int importOrder(String fileName, int productLineId, int isEmergency, int isGuanShu) throws IllegalStateException {
         InputStream inputStream = null;
         try {
             File file = new File(fileName);
@@ -761,7 +823,7 @@ public class OrderController {
             opt = new DatabaseOpt();
             try {
                 conn = opt.getConnect();
-                statement = conn.prepareCall("{call [tbAddOrderInfo](?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+                statement = conn.prepareCall("{call [tbAddOrderInfo](?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
                 for (OrderInfo infoImport : imports) {
                     statement.setInt("productLineId", infoImport.getProductLineId());
                     statement.setInt("planNum", infoImport.getPlanNum());
@@ -772,6 +834,7 @@ public class OrderController {
                     statement.setString("productStandard", infoImport.getProductStandard());
                     statement.setString("planFinishedTime", infoImport.getPlanFinishTime());
                     statement.setInt("isEmergency", isEmergency);
+                    statement.setInt("isGuanShu", isGuanShu);
                     statement.setString("customerName", infoImport.getCustomerName());
                     statement.addBatch();
                 }
