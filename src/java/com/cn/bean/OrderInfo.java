@@ -140,6 +140,8 @@ public class OrderInfo {
                 }
                 case "ProductLengthValue": {
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productLength) ? ("") : (productLength));
+                    if (!Units.strIsEmpty(productLength))
+                        object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("viewType", 1);
                     break;
                 }
                 case "MarkColorValue": {

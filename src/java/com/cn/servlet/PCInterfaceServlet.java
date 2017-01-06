@@ -585,7 +585,7 @@ public class PCInterfaceServlet extends HttpServlet {
                 //<editor-fold desc="addTechnicalGuanShu">
                 case "addTechnicalGuanShu": {
                     int productLineId = paramsJson.getIntValue("productLineId");
-                    if (productLineId == 2) {
+                    if (productLineId == 4) {
                         String productCode = paramsJson.getString("productCode_gs");
                         int xiaLiaoNextStation = paramsJson.getIntValue("xiaLiaoNextStation_gs");
                         int caiBiaoNextStation = paramsJson.getIntValue("caiBiaoNextStation_gs");
@@ -601,7 +601,7 @@ public class PCInterfaceServlet extends HttpServlet {
                             json = Units.objectToJson(result, "添加失败!", null);
                         }
                     } else {
-                        json = Units.objectToJson(-1, "添加失败!", null);
+                        json = Units.objectToJson(-1, "生产线选择错误!", null);
                     }
                     break;
                 }

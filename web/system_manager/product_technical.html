@@ -228,10 +228,10 @@ and open the template in the editor.
                         htmlStr += "<td><input type='checkbox' /></td>";
                         htmlStr += "<td>" + (obj.data[i].technicalID ? obj.data[i].technicalID : "") + "</td>";
                         htmlStr += "<td>" + (obj.data[i].productCode ? obj.data[i].productCode : "") + "</td>";
-                        htmlStr += "<td>" + stationList[2][(obj.data[i].xiaLiaoNextStation ? obj.data[i].xiaLiaoNextStation : 0)] + "</td>";
-                        htmlStr += "<td>" + stationList[2][(obj.data[i].caiBiaoNextStation ? obj.data[i].caiBiaoNextStation : 0)] + "</td>";
-                        htmlStr += "<td>" + stationList[2][(obj.data[i].yaZhuangNextStation ? obj.data[i].yaZhuangNextStation : 0)] + "</td>";
-                        htmlStr += "<td>" + stationList[2][(obj.data[i].huaXianNextStation ? obj.data[i].huaXianNextStation : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[4][(obj.data[i].xiaLiaoNextStation ? obj.data[i].xiaLiaoNextStation - 30 : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[4][(obj.data[i].caiBiaoNextStation ? obj.data[i].caiBiaoNextStation - 30 : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[4][(obj.data[i].yaZhuangNextStation ? obj.data[i].yaZhuangNextStation - 30 : 0)] + "</td>";
+                        htmlStr += "<td>" + stationList[4][(obj.data[i].huaXianNextStation ? obj.data[i].huaXianNextStation - 30 : 0)] + "</td>";
                         htmlStr += "<td>";
                         htmlStr += "<a href='product_technical_edit.html?productLineId=" + $("#productLineId").val() + "&productCode=" + obj.data[i].productCode + "'>编辑</a>";
                         htmlStr += "<span>|</span><a href='javascript:deleteTechnical(" + $("#productLineId").val() + "," + obj.data[i].technicalID + ")'>删除</a>";

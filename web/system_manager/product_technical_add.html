@@ -141,24 +141,35 @@ and open the template in the editor.
                         $("#gaoYaGuanAddDiv").css("display", "block");
                         $("#yaZhuangAddDiv").css("display", "none");
                         $("#chengXingAddDiv").css("display", "none");
+                        $("#guanShuAddDiv").css("display", "none");
                         $("#zhuanAddDiv").css("display", "none");
                     }
                     if (productLine == 2) {
                         $("#gaoYaGuanAddDiv").css("display", "none");
                         $("#yaZhuangAddDiv").css("display", "block");
                         $("#chengXingAddDiv").css("display", "none");
+                        $("#guanShuAddDiv").css("display", "none");
                         $("#zhuanAddDiv").css("display", "none");
                     }
                     if (productLine == 3) {
                         $("#gaoYaGuanAddDiv").css("display", "none");
                         $("#yaZhuangAddDiv").css("display", "none");
                         $("#chengXingAddDiv").css("display", "block");
+                        $("#guanShuAddDiv").css("display", "none");
+                        $("#zhuanAddDiv").css("display", "none");
+                    }
+                    if (productLine == 4) {
+                        $("#gaoYaGuanAddDiv").css("display", "none");
+                        $("#yaZhuangAddDiv").css("display", "none");
+                        $("#chengXingAddDiv").css("display", "none");
+                        $("#guanShuAddDiv").css("display", "block");
                         $("#zhuanAddDiv").css("display", "none");
                     }
                     if (productLine == 99) {
                         $("#gaoYaGuanAddDiv").css("display", "none");
                         $("#yaZhuangAddDiv").css("display", "none");
                         $("#chengXingAddDiv").css("display", "none");
+                        $("#guanShuAddDiv").css("display", "none");
                         $("#zhuanAddDiv").css("display", "block");
                     }
                 });
@@ -521,7 +532,7 @@ and open the template in the editor.
                                     <option value="0">无</option>
                                     <option value="31">下料</option>
                                     <option value="32">彩标</option>
-                                    <option value="33">成型</option>
+                                    <option value="33">压装</option>
                                     <option value="34">划线</option>
                                 </select>
                                 <input type="hidden" name="xiaLiaoNextStation_gs" id="xiaLiaoNextStation_gs" value="0" />
@@ -531,7 +542,7 @@ and open the template in the editor.
                                     <option value="0">无</option>
                                     <option value="31">下料</option>
                                     <option value="32">彩标</option>
-                                    <option value="33">成型</option>
+                                    <option value="33">压装</option>
                                     <option value="34">划线</option>
                                 </select>
                                 <input type="hidden" name="caiBiaoNextStation_gs" id="caiBiaoNextStation_gs" value="0" />
@@ -541,7 +552,7 @@ and open the template in the editor.
                                     <option value="0">无</option>
                                     <option value="31">下料</option>
                                     <option value="32">彩标</option>
-                                    <option value="33">成型</option>
+                                    <option value="33">压装</option>
                                     <option value="34">划线</option>
                                 </select>
                                 <input type="hidden" name="yaZhuangNextStation_gs" id="yaZhuangNextStation_gs" value="0" />
@@ -551,7 +562,7 @@ and open the template in the editor.
                                     <option value="0">无</option>
                                     <option value="31">下料</option>
                                     <option value="32">彩标</option>
-                                    <option value="33">成型</option>
+                                    <option value="33">压装</option>
                                     <option value="34">划线</option>
                                 </select>
                                 <input type="hidden" name="huaXianNextStation_gs" id="huaXianNextStation_gs" value="0" />

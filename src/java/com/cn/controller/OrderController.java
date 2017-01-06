@@ -85,6 +85,7 @@ public class OrderController {
                 info.setProductBatch(set.getString("ProductBatch"));
                 info.setYaZhuangOrHuaXian(set.getString("YaZhuangOrHuaXian"));
                 info.setYaZhuangOrHuaXianSort(set.getString("YaZhuangOrHuaXianSort"));
+                info.setProductLength(set.getString("ProductLength"));
                 info.setPlanNum(set.getInt("PlanNum"));
                 info.setIsGuanShu(set.getInt("IsGuanShu"));
                 info.setProductColor(set.getString("ProductColor"));
@@ -147,6 +148,7 @@ public class OrderController {
                     info.setProductBatch(set.getString("ProductBatch"));
                     info.setYaZhuangOrHuaXian(set.getString("YaZhuangOrHuaXian"));
                     info.setYaZhuangOrHuaXianSort(set.getString("YaZhuangOrHuaXianSort"));
+                    info.setProductLength(set.getString("ProductLength"));
                     info.setPlanNum(set.getInt("PlanNum"));
                     info.setIsGuanShu(set.getInt("IsGuanShu"));
                     info.setProductColor(set.getString("ProductColor"));
@@ -217,6 +219,7 @@ public class OrderController {
                 info.setProductBatch(set.getString("ProductBatch"));
                 info.setYaZhuangOrHuaXian(set.getString("YaZhuangOrHuaXian"));
                 info.setYaZhuangOrHuaXianSort(set.getString("YaZhuangOrHuaXianSort"));
+                info.setProductLength(set.getString("ProductLength"));
                 info.setPlanNum(set.getInt("PlanNum"));
                 info.setIsGuanShu(set.getInt("IsGuanShu"));
                 info.setProductColor(set.getString("ProductColor"));
