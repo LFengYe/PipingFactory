@@ -777,7 +777,7 @@ public class OrderController {
             HSSFSheet sheet = workbook.getSheetAt(0);
             ArrayList<OrderInfo> imports = new ArrayList<>();
             for (int i = 1; i <= sheet.getPhysicalNumberOfRows(); i++) {
-                logger.info("count row num:" + sheet.getPhysicalNumberOfRows() + ",the row num is:" + i);
+//                logger.info("count row num:" + sheet.getPhysicalNumberOfRows() + ",the row num is:" + i);
                 HSSFRow row = sheet.getRow(i);
                 if (null == row) {
                     continue;

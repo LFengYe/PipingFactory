@@ -129,7 +129,7 @@ public class AppInterfaceServlet extends HttpServlet {
                             if (userInfo.getUserType() == -1) {
                                 orderInfos = controller.getAutoXiaLiaoOrderInfo(userInfo.getUserId(), 1, 1);
                             } else {
-                                orderInfos = controller.getFirstStationOrderInfo(Units.getNowDate(), -1, userInfo.getUserId(), 0, 1, 1);
+                                orderInfos = controller.getFirstStationOrderInfo(Units.getNowDate(), -1, userInfo.getUserId(), -1, 1, 1);
                             }
                             if (null != orderInfos && orderInfos.size() > 0) {
                                 json = Units.objectToJson(1, "", orderInfos.get(0));
