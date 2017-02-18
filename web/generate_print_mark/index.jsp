@@ -65,9 +65,14 @@
                         mark += "*CCC  A082009*";
                     }
                     if (isOilPipe == 4) {
-                        mark += productCode + "  ";
+                        mark += "H152 " + productCode + "  ";
                         mark += getNowDateWithProduct() + "  ";
                         mark += "D";
+                    }
+                    if (isOilPipe == 5) {
+                        mark += "H152 CCC ";
+                        mark += productCode + " ";
+                        mark += getNowDateWithProduct();
                     }
                     $("#print_mark").val(mark);
                     $("#print_mark").focus();
@@ -144,6 +149,7 @@
                         <option value="2">非油管产品</option>
                         <option value="3">大运产品</option>
                         <option value="4">高压管产品</option>
+                        <option value="5">十堰产品</option>
                     </select>
                     <input type="hidden" name="isOilPipe" id="isOilPipe" value="-1" />
                     <a class="btn btn-default" role="button" id="generate_mark">生成标识</a>
