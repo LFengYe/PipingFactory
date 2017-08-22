@@ -50,7 +50,8 @@ public class AppInterfaceServlet extends HttpServlet {
                 uri.lastIndexOf("."));
         String json = null;
         try {
-            System.out.println(subUri + ",params:" + params);
+            //System.out.println(subUri + ",params:" + params);
+            logger.info(subUri + ",params:" + params);
             JSONObject paramsJson = JSONObject.parseObject(params);
             switch (subUri) {
                 //<editor-fold desc="login">

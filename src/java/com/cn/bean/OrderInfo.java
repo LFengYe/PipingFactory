@@ -78,6 +78,7 @@ public class OrderInfo {
 
         for (int i = 0; i < struct.getChildRowNum(); i++) {
             String fieldName = object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().get("fieldName").getAsString();
+            //System.out.println("fieldName:" + fieldName);
             switch (fieldName) {
                 case "ProductZlValue": {
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productCommand) ? ("") : (productCommand));
@@ -132,10 +133,15 @@ public class OrderInfo {
                 }
                 case "ProductStandardValue": {
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productStandard) ? ("") : (productStandard));
+                    if (!Units.strIsEmpty(productStandard))
+                        object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("viewType", 1);
                     break;
                 }
                 case "ProductBatchValue": {
+                    //System.out.println("productBatch:" + productBatch);
                     object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("fieldValue", (null == productBatch) ? ("") : (productBatch));
+                    if (!Units.strIsEmpty(productBatch))
+                        object.get("rowData" + (i + 1)).getAsJsonArray().get(1).getAsJsonObject().addProperty("viewType", 1);
                     break;
                 }
                 case "ProductLengthValue": {
