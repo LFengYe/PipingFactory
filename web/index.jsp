@@ -20,6 +20,7 @@
         <script type="text/javascript" src="javascript/html5shiv.min.js"></script>
         <![endif]-->
         <script type="text/javascript" src="javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="javascript/jquery.cookie.js"></script>
         <script type="text/javascript" src="javascript/JSON-js-master/json2.js"></script>
         <script type="text/javascript" src="javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="javascript/bootstrap-treeview.min.js"></script>
@@ -28,12 +29,46 @@
         <title>后台管理</title>
         <script type="text/javascript">
             window.onload = function () {
+                initTheme();
                 findDimensions();
                 createTreeMenu();
                 $("#password").bind('click', function () {
                     displayLayer('modify_pass.html', '修改密码', null, -1);
                 });
+
+                $("#theme_refresh").bind('click', function () {
+                    var cookie_style = $.cookie("mystyle");
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $(this).attr("title", "drak");
+                        $.cookie("mystyle", "drak", {expires: 30});
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $(this).attr("title", "normal");
+                        $.cookie("mystyle", "normal", {expires: 30});
+                    }
+                    location.reload();
+                });
             };
+            function initTheme() {
+                var cookie_style = $.cookie("mystyle");
+                if (cookie_style == null) {
+                    $("link[title='normal']").removeAttr("disabled");
+                } else {
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $(this).attr("title", "drak");
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $(this).attr("title", "normal");
+                    }
+                }
+            }
+
             function createTreeMenu() {
                 var tree = ${sessionScope.user.userPermission};
                 $('#tree_menu').treeview({
@@ -73,6 +108,7 @@
             <div class="navbar_info">
                 <table>
                     <tr>
+                        <td><a href="javascript:void(0)" id="theme_refresh" title="切换主题" class="glyphicon glyphicon-refresh"></a></td>
                         <td id="username"><a title="hello_username" href="#" class="largeimagespace">Hi,${sessionScope.user.username}</a></td>
                         <td ><a href="javascript:void(0)" id="password" title="修改密码"><img src="images/modify_password.png" alt="modify password"></img></a></td>
                         <td id="out"><a href="exit.jsp" title="退出登录" target="_top"><img src="images/login_out.png" alt="login out"></img></a></td>

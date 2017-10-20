@@ -8,11 +8,13 @@ and open the template in the editor.
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="normal" rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="drak" rel="stylesheet" href="../style_drak/detail_style.css" type="text/css" media="all" disabled="disabled" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" />
 
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/jquery.cookie.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
         <script type="text/javascript" src="../javascript/JSON-js-master/json2.js"></script>
@@ -21,10 +23,28 @@ and open the template in the editor.
         <script type="text/javascript" src="../javascript/projectScript.js"></script>
         <script type="text/javascript">
             window.onload = function () {
+                initTheme();
                 initEvent();
                 getUserList("search_form");
             };
-            
+            function initTheme() {
+                var cookie_style = $.cookie("mystyle");
+                if (cookie_style == null) {
+                    $("link[title='normal']").removeAttr("disabled");
+                    $("body").css("background", "#e9f0fa");
+                } else {
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $("body").css("background", "#160f05");
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $("body").css("background", "#e9f0fa");
+                    }
+                }
+            }
+
             function initEvent() {
                 $("#beginTime").bind("click", function () {
                     new WdatePicker({dateFmt: 'yy/MM/dd', maxDate: getMaxDate()});
@@ -35,14 +55,14 @@ and open the template in the editor.
                 $("#search").bind("click", function () {
                     getUserList("search_form");
                 });
-                $("reset").bind("click", function() {
+                $("reset").bind("click", function () {
                     document.getElementById("search_from").reset();
                 });
             }
-            
+
             function deleteUser(userId) {
                 var sendBody = '{"userId":"' + userId + '"}';
-                getDataInterface("deleteUserInfo.pc", sendBody, function(result){
+                getDataInterface("deleteUserInfo.pc", sendBody, function (result) {
                     var obj = JSON.parse(result);
                     alert(obj.message);
                     if (obj.status === 0) {
@@ -50,15 +70,15 @@ and open the template in the editor.
                     }
                 });
             }
-            
+
             function getUserList(formId) {
                 var sendBody = serializeForm(formId);
-                getDataInterface('getUserList.pc', sendBody, function(result){
+                getDataInterface('getUserList.pc', sendBody, function (result) {
                     var obj = JSON.parse(result);
                     if (obj.status === 0) {
                         var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>用户名</td><td>用户类型</td><td>所在工位名称</td><td>操作</td></tr>";
                         var length = obj.data.length;
-                        for(var i = 0; i < length; i++){
+                        for (var i = 0; i < length; i++) {
                             htmlStr += "<tr class='table_content'>";
                             htmlStr += "<td><input type='checkbox' /></td>";
                             htmlStr += "<td>" + (obj.data[i].userId ? obj.data[i].userId : "") + "</td>";
@@ -72,7 +92,7 @@ and open the template in the editor.
                         }
                         htmlStr += "</table>";
                         $("#message_list").html(htmlStr);
-                        
+
                         var recordCount = obj.count;
                         var pageSize = $("#pageSize").val();
                         var pageCount = parseInt((recordCount % pageSize === 0) ? (recordCount / pageSize) : (recordCount / pageSize + 1));
@@ -85,7 +105,7 @@ and open the template in the editor.
                     }
                 });
             }
-            
+
             function layerPage(pageCount) {
                 document.getElementById("page_info").innerHTML = '目前正在第' + $("#pageIndex").val() + '页，一共有' + pageCount + '页';
                 laypage({
@@ -103,7 +123,7 @@ and open the template in the editor.
             }
         </script>
     </head>
-    <body style="background-color: #e9f0fa;">
+    <body style="/*background-color: #160f05;*/background-color: #e9f0fa;">
         <div class="titleName"><div class="vline"></div>用户管理</div>
         <div class="myline"></div>
 

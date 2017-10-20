@@ -1,0 +1,63 @@
+/* 
+    Document   : navbar_style
+    Created on : 2014-10-11, 23:21:21
+    Author     : LFeng
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/*******************************************************************************/
+#logo {
+    float: left;
+    background: #15a4fa;
+    width: 220px;
+    height: 45px;
+}
+#logo h2 {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.navbar_info {
+    color: #FFFFFF;
+    height: 45px;
+    float: right;
+    overflow: hidden;
+}
+.navbar_info a img{border: 0;}
+.navbar_info a:link,
+.navbar_info a:visited{
+    font-weight: bold;
+    text-decoration: none;
+    color: #7F7F7F;
+}
+.navbar_info a:hover,
+.navbar_info a:active{
+    font-weight: bold;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+.navbar_info tr {
+    height: 45px;
+}
+.navbar_info td {
+    background-position: left center;
+}
+
+#username {
+    background-repeat: no-repeat;
+}
+.imgspace {
+    margin: 0px 40px 0px 25px;
+}
+.largeimagespace {
+    margin: 0px 0px 0px 40px;
+}
+.checked_link {
+    color: #FFFFFF;
+    margin: 0px 40px 0px 25px;
+}
+tr td a img {
+    margin: 0px 10px 0px 10px;
+    text-align: center;   
+}

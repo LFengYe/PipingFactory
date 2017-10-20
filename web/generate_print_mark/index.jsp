@@ -10,17 +10,20 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="normal" rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="drak" rel="stylesheet" href="../style_drak/detail_style.css" type="text/css" media="all" disabled="disabled" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" />
 
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/jquery.cookie.js"></script>
         <script type="text/javascript" src="../javascript/JSON-js-master/json2.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/script.js"></script>
         <script type="text/javascript" src="../javascript/projectScript.js"></script>
         <script type="text/javascript">
             window.onload = function () {
+                initTheme();
                 $("#stationId").val(${sessionScope.user.stationId});
                 $("#submit_mark").bind("click", function() {
                     var inputObj = new Object();
@@ -49,12 +52,12 @@
                     }
                     if (isOilPipe == 1) {
                         mark += "";
-                        mark += productCode + "  ";
+                        mark += productCode + "    ";
                         mark += getNowDateWithProduct();
                     }
                     if (isOilPipe == 2) {
-                        mark += "CCC  ";
-                        mark += productCode + "  ";
+                        mark += "CCC    ";
+                        mark += productCode + "    ";
                         mark += getNowDateWithProduct();
                     }
                     if (isOilPipe == 3) {
@@ -62,15 +65,15 @@
                         mark += getNowDateWithDaYun();
                         mark += "*";
                         mark += productCode;
-                        mark += "*CCC  A082009*";
+                        mark += "*CCC   A082009*";
                     }
                     if (isOilPipe == 4) {
-                        mark += "H152 " + productCode + "  ";
-                        mark += getNowDateWithProduct() + "  ";
+                        mark += "H152   " + productCode + "   ";
+                        mark += getNowDateWithProduct() + "   ";
                         mark += "D";
                     }
                     if (isOilPipe == 5) {
-                        mark += "H152 CCC ";
+                        mark += "H152   CCC ";
                         mark += productCode + " ";
                         mark += getNowDateWithProduct();
                     }
@@ -108,7 +111,25 @@
                     });
                 });
             };
-
+            
+            function initTheme() {
+                var cookie_style = $.cookie("mystyle");
+                if (cookie_style == null) {
+                    $("link[title='normal']").removeAttr("disabled");
+                    $("body").css("background", "#e9f0fa");
+                } else {
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $("body").css("background", "#160f05");
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $("body").css("background", "#e9f0fa");
+                    }
+                }
+            }
+            
             function getNowDateWithProduct() {
                 var t = new Date();
                 var nowDate = [t.getFullYear().toString().substr(2,2),

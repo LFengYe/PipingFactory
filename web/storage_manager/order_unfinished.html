@@ -8,11 +8,13 @@ and open the template in the editor.
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="normal" rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="drak" rel="stylesheet" href="../style_drak/detail_style.css" type="text/css" media="all" disabled="disabled" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" />
         <title></title>
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/jquery.cookie.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
         <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
@@ -20,6 +22,7 @@ and open the template in the editor.
         <script type="text/javascript" src="../javascript/projectScript.js"></script>
         <script type="text/javascript">
             window.onload = function () {
+                initTheme();
                 $("#productLineIdSelect").bind("change", function () {
                     $("#productLineId").val($("#productLineIdSelect").val());
                     getOrderList("search_form");
@@ -38,6 +41,23 @@ and open the template in the editor.
                 });
                 getOrderList("search_form");
             };
+            function initTheme() {
+                var cookie_style = $.cookie("mystyle");
+                if (cookie_style == null) {
+                    $("link[title='normal']").removeAttr("disabled");
+                    $("body").css("background", "#e9f0fa");
+                } else {
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $("body").css("background", "#160f05");
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $("body").css("background", "#e9f0fa");
+                    }
+                }
+            }
             function getOrderList(formId) {
                 var sendBody = serializeForm(formId);
                 getDataInterface('getOrderList.pc', sendBody, function (result) {
@@ -45,18 +65,18 @@ and open the template in the editor.
                     if (obj.status === 0) {
                         var htmlStr = "<table class='detail_data'><tr class='table_header'><td>选择</td><td>序号</td><td>生产订单号</td><td>物料编码</td><td>物料名称</td><td>周转卡号</td><td>单位</td><td>计划完工数量</td><td>规格</td><td>计划完工日期</td><td>客户名称</td></tr>";
                         for (var i = 0; i < obj.data.length; i++) {
-                            htmlStr += "<tr class='table_content'>";
+                            htmlStr += (i % 2 === 0) ? "<tr class='table_content'>" : "<tr class='table_content1'>";
                             htmlStr += "<td><input type='checkbox' /></td>";
                             htmlStr += "<td>" + (obj.data[i].orderId ? obj.data[i].orderId : "") + "</td>";
                             htmlStr += "<td>" + (obj.data[i].productCommand ? obj.data[i].productCommand : "") + "</td>";
-                            htmlStr += "<td>" + (obj.data[i].productCode ? obj.data[i].productCode : "") + "</td>";
+                            htmlStr += "<td class='yellow_color'>" + (obj.data[i].productCode ? obj.data[i].productCode : "") + "</td>";
                             htmlStr += "<td>" + (obj.data[i].productName ? obj.data[i].productName : "") + "</td>";
                             htmlStr += "<td>" + (obj.data[i].cardNum ? obj.data[i].cardNum : "") + "</td>";
                             htmlStr += "<td>" + (obj.data[i].productUnit ? obj.data[i].productUnit : "") + "</td>";
-                            htmlStr += "<td>" + (obj.data[i].planNum ? obj.data[i].planNum : "") + "</td>";
-                            htmlStr += "<td>" + (obj.data[i].productStandard ? obj.data[i].productStandard : "") + "</td>";
+                            htmlStr += "<td class='yellow_color'>" + (obj.data[i].planNum ? obj.data[i].planNum : "") + "</td>";
+                            htmlStr += "<td class='yellow_color'>" + (obj.data[i].productStandard ? obj.data[i].productStandard : "") + "</td>";
                             htmlStr += "<td>" + (obj.data[i].planFinishTime ? obj.data[i].planFinishTime : "") + "</td>";
-                            htmlStr += "<td>" + (obj.data[i].customerName ? obj.data[i].customerName : "") + "</td>";
+                            htmlStr += "<td class='green_color'>" + (obj.data[i].customerName ? obj.data[i].customerName : "") + "</td>";
                         }
                         htmlStr += "</table>";
                         $("#message_list").html(htmlStr);

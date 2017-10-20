@@ -54,7 +54,6 @@ public class PCInterfaceServlet extends HttpServlet {
                 uri.lastIndexOf("."));
         String json = "";
         try {
-            System.out.println(subUri + ",params:" + params);
             JSONObject paramsJson = JSONObject.parseObject(params);
             HttpSession session = request.getSession();
             /*验证是否登陆*/
@@ -73,6 +72,8 @@ public class PCInterfaceServlet extends HttpServlet {
                 }
                 return;
             }
+            
+            logger.info(subUri + ",params:" + params + ",user:" + session.getAttribute("user"));
             switch (subUri) {
                 //<editor-fold desc="login">
                 case "login": {

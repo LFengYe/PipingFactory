@@ -8,11 +8,13 @@ and open the template in the editor.
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="normal" rel="stylesheet" href="../style/detail_style.css" type="text/css" media="all" />
+        <link title="drak" rel="stylesheet" href="../style_drak/detail_style.css" type="text/css" media="all" disabled="disabled" />
         <link rel="stylesheet" href="../style/style.css" type="text/css" media="all" />
         <link rel="stylesheet" href="../style/bootstrap.min.css" />
         <title></title>
         <script type="text/javascript" src="../javascript/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../javascript/jquery.cookie.js"></script>
         <script type="text/javascript" src="../javascript/bootstrap.min.js"></script>
         <script type="text/javascript" src="../javascript/laypage/laypage.js"></script>
         <script type="text/javascript" src="../javascript/My97DatePicker/WdatePicker.js"></script>
@@ -20,6 +22,7 @@ and open the template in the editor.
         <script type="text/javascript" src="../javascript/projectScript.js"></script>
         <script type="text/javascript">
             window.onload = function () {
+                initTheme();
                 $("#search").bind("click", function () {
                     getProductTechnical("search_form");
                 });
@@ -89,6 +92,23 @@ and open the template in the editor.
                 $("#productCode").val(getUrlParam("productCode"));
                 getProductTechnical("search_form");
             };
+            function initTheme() {
+                var cookie_style = $.cookie("mystyle");
+                if (cookie_style == null) {
+                    $("link[title='normal']").removeAttr("disabled");
+                    $("body").css("background", "#e9f0fa");
+                } else {
+                    if (cookie_style === "normal") {
+                        $("link[title='drak']").removeAttr("disabled");
+                        $("link[title='normal']").attr("disabled", "disabled");
+                        $("body").css("background", "#160f05");
+                    } else {
+                        $("link[title='normal']").removeAttr("disabled");
+                        $("link[title='drak']").attr("disabled", "disabled");
+                        $("body").css("background", "#e9f0fa");
+                    }
+                }
+            }
 
             function getProductTechnical(search_form) {
                 var sendBody = serializeForm(search_form);
